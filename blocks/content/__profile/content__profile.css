@@ -1,0 +1,10 @@
+.content__profile {
+    outline: 1px solid teal;
+    max-width: 100%;
+    margin-top: 0;
+    margin-right: auto;
+    margin-bottom: 50px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}

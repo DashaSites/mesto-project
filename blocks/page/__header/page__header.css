@@ -1,0 +1,9 @@
+.page__header {
+    max-width: 100%;
+    margin-top: 45px;
+    margin-right: auto;
+    margin-bottom: 40px;
+    margin-left: auto; 
+    outline: 1px solid teal;
+    border-bottom: 2px solid #545454;  
+}
