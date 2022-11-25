@@ -1,0 +1,10 @@
+.content__elements {
+    width: 100%;
+    outline: 1px solid navajowhite;
+    margin-bottom: 66px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    column-gap: 17px;
+    row-gap: 20px;
+}

@@ -1,8 +1,7 @@
 .profile__name-block {
     outline: 1px solid rosybrown;
-    margin-bottom: 16px;
+    margin-bottom: 7px;
     display: flex;
     justify-content: space-between;
-    align-items: end;
-    vertical-align: baseline;
+    align-items: baseline;
 }
