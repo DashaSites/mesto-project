@@ -1,5 +1,19 @@
 .page__footer {
-    width: 36.1%;
-    outline: 1px solid skyblue;
-    margin-bottom: 60px;
+    max-width: 100%;
+    margin: 0 auto 60px;
+  }
+
+
+@media screen and (max-width: 1023px) {
+    .page__footer {
+        max-width: 80%;
+        margin: 0 auto;
+    }
+}
+  
+@media screen and (max-width: 767px) {
+    .page__footer {
+      max-width: 88.12%;
+      margin-bottom: 36px;
+    }
 }

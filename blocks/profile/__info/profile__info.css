@@ -1,5 +1,16 @@
 .profile__info {
-    outline: 1px solid green;
-    width: 38.1%;
+    max-width: 38.1%;
     margin-right: auto;
+}
+
+
+@media screen and (max-width: 767px) {
+    .profile__info {
+        max-width: 88.12%;
+        margin-top: 26px;
+        margin-right: auto;
+        margin-bottom: 36px;
+        margin-left: auto;
+        text-align: center;
+    }
 }

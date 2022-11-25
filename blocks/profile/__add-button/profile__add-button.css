@@ -3,14 +3,26 @@
     height: 50px;
     background-color: #000;
     border: 2px solid #fff;
+    padding: 0;
     border-radius: 2px;
-    background-image: url(../../../images/add-button-plus.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    transition: 0.5s;
+    background: url(../../../images/add-button-plus.svg) center no-repeat;
+    transition: .5s;
 }
 
 .profile__add-button:hover {
     cursor: pointer;
-    opacity: 60%;
+    opacity: .6;
+}
+
+  
+@media screen and (max-width: 767px) {
+    .profile__add-button {
+      width: 50%;
+    }
+}
+  
+@media screen and (max-width: 430px) {
+    .profile__add-button {
+      width: 100%;
+    }
 }

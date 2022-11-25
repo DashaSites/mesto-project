@@ -2,7 +2,6 @@
     width: 880px;
     background-color: #000;
     margin: 0 auto;
-    outline: 1px solid firebrick;
     font-family: Inter, Arial, sans-serif;
     font-style: normal;
     font-size: 24px;
@@ -14,6 +13,20 @@
     -ms-text-size-adjust: 100%;
     -moz-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
+}
+
+
+@media screen and (max-width: 1023px) {
+  .page {
+      max-width: 80%;
+  }
+}
+
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+    .page {
+      max-width: 100%;
+    }
 }
 
 

@@ -1,5 +1,4 @@
 .content__profile {
-    outline: 1px solid teal;
     max-width: 100%;
     margin-top: 0;
     margin-right: auto;
@@ -7,4 +6,22 @@
     margin-left: auto;
     display: flex;
     align-items: center;
+}
+
+
+@media screen and (max-width: 1023px) {
+    .content__profile {
+        margin-top: 50px;
+        margin-bottom: 60px;
+        max-width: 80%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .content__profile {
+        max-width: 88.12%;
+        margin-top: 42px;
+        margin-bottom: 36px;
+        flex-direction: column;
+    }
 }

@@ -1,7 +1,13 @@
 .profile__name-block {
-    outline: 1px solid rosybrown;
     margin-bottom: 7px;
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+}
+
+
+@media screen and (max-width: 767px) {
+    .profile__name-block {
+        margin-bottom: 14px;
+    }
 }

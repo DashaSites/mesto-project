@@ -1,92 +1,86 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mesto</title>
-    <link rel="stylesheet" href="./pages/index.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesto</title>
+  <link rel="stylesheet" href="./pages/index.css">
 </head>
 <body class="page">
-    <header class="header page__header">
-        <img class="header__logo" src="./images/logo.svg" alt="Логотип Mesto">
+  <header class="header page__header">
+  <img class="header__logo" src="./images/logo.svg" alt="Логотип Mesto">
     </header>
-     
     <main class="content">
-
       <section class="profile content__profile">
-          <img class="profile__avatar" src="./images/avatar.jpg" alt="Фото пользователя">
-          <div class="profile__info">
-              <div class="profile__name-block">
-                  <h1 class="profile__name">Жак-Ив Кусто</h1>
-                  <button class="profile__edit-button" type="button"></button>
-              </div>
-              <p class="profile__occupation">Исследователь океана</p>
+        <img class="profile__avatar" src="./images/avatar.jpg" alt="Фото пользователя">
+        <div class="profile__info">
+          <div class="profile__name-block">
+            <h1 class="profile__name">Жак-Ив Кусто</h1>
+            <button class="profile__edit-button" type="button"></button>
           </div>
-          <button class="profile__add-button"></button>
+          <p class="profile__occupation">Исследователь океана</p>
+        </div>
+        <button class="profile__add-button"></button>
       </section>
-
       <section class="elements content__elements">
-
-          <div class="element">
-              <img class="element__image" src="./images/nairobi.jpg" alt="Пастух в Найроби">
-              <div class="element__details">
-                  <h2 class="element__caption">Найроби</h2>
-                  <button class="element__like-button"></button>
-              </div>
+        <div class="element">
+          <img class="element__image" src="./images/nairobi.jpg" alt="Пастух в Найроби">
+          <div class="element__details">
+            <h2 class="element__caption">Найроби</h2>
+            <button class="element__like-button"></button>
           </div>
-          <div class="element">
-            <img class="element__image" src="./images/stonetown.jpg" alt="Котята спят в горшке">
-            <div class="element__details">
-                <h2 class="element__caption">Занзибар</h2>
-                <button class="element__like-button"></button>
-            </div>
         </div>
         <div class="element">
-            <img class="element__image" src="./images/hidden-leopard.jpg" alt="Леопард крадется в саванне">
-            <div class="element__details">
-                <h2 class="element__caption">Серенгети</h2>
-                <button class="element__like-button"></button>
-            </div>
+          <img class="element__image" src="./images/stonetown.jpg" alt="Котята спят в горшке">
+          <div class="element__details">
+            <h2 class="element__caption">Занзибар</h2>
+            <button class="element__like-button"></button>
+          </div>
         </div>
         <div class="element">
-            <img class="element__image" src="./images/serengeti.jpg" alt="Даман сидит на скале">
-            <div class="element__details">
-                <h2 class="element__caption">Где-то</h2>
-                <button class="element__like-button"></button>
-            </div>
+          <img class="element__image" src="./images/hidden-leopard.jpg" alt="Леопард крадется в саванне">
+          <div class="element__details">
+            <h2 class="element__caption">Серенгети</h2>
+            <button class="element__like-button"></button>
+          </div>
         </div>
         <div class="element">
-            <img class="element__image" src="./images/kilwa.jpg" alt="Вид на небо из древней мечети">
-            <div class="element__details">
-                <h2 class="element__caption">Килва-Кисивани</h2>
-                <button class="element__like-button"></button>
-            </div>
+          <img class="element__image" src="./images/serengeti.jpg" alt="Даман сидит на скале">
+          <div class="element__details">
+            <h2 class="element__caption">Где-то</h2>
+            <button class="element__like-button"></button>
+          </div>
         </div>
         <div class="element">
-            <img class="element__image" src="./images/hippos.jpg" alt="Бегемоты в озере">
-            <div class="element__details">
-                <h2 class="element__caption">Тарангире</h2>
-                <button class="element__like-button"></button>
-            </div>
+          <img class="element__image" src="./images/kilwa.jpg" alt="Вид на небо из древней мечети">
+          <div class="element__details">
+            <h2 class="element__caption">Килва-Кисивани</h2>
+            <button class="element__like-button"></button>
+          </div>
         </div>
-
+        <div class="element">
+          <img class="element__image" src="./images/hippos.jpg" alt="Бегемоты в озере">
+          <div class="element__details">
+            <h2 class="element__caption">Тарангире</h2>
+            <button class="element__like-button"></button>
+          </div>
+        </div>
       </section>
     </main>
     <footer class="footer page__footer">
-        <p class="footer__content">&copy; 2022 Mesto Russia</p>
+      <p class="footer__content">&copy; 2022 Mesto Russia</p>
     </footer>
-
     <div class="popup">
-        <div class="popup__container">
-            <form class="popup__form">
-                <h2 class="popup__form-title">Редактировать профиль</h2>
-                <input class="popup__form-input-item popup__form-input-item_type_name" type="text" name="name" value="Жак-Ив-Кусто"></input>
-                <input class="popup__form-input-item popup__form-input-item_type_occupation" type="text" name="occupation" value="Исследователь океана"></input>
-                <button class="popup__submit-button" type="submit">Сохранить</button>
-            </form>
-            <button class="popup__close-button" type="button"></button>
-        </div>
+      <div class="popup__container">
+        <form class="popup__form">
+          <h2 class="popup__form-title">Редактировать профиль</h2>
+          <input class="popup__form-input-item popup__form-input-item_type_name" type="text" name="name" value="Жак-Ив-Кусто">
+          <input class="popup__form-input-item popup__form-input-item_type_occupation" type="text" name="occupation" value="Исследователь океана">
+          <button class="popup__submit-button" type="submit">Сохранить</button>
+        </form>
+        <button class="popup__close-button" type="button"></button>
+      </div>
     </div>
 </body>
 </html>

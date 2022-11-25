@@ -1,9 +1,22 @@
 .page__header {
     max-width: 100%;
-    margin-top: 45px;
-    margin-right: auto;
-    margin-bottom: 40px;
-    margin-left: auto; 
-    outline: 1px solid teal;
-    border-bottom: 2px solid #545454;  
+    margin: 45px auto;
+    border-bottom: 1px solid #545454;  
+    padding-bottom: 33px;
+}
+
+
+@media screen and (max-width: 1023px) {
+    .page__header {
+        max-width: 80%;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .page__header {
+        width: 100%;
+        margin-top: 28px;
+        margin-bottom: 42px;
+    }
 }
