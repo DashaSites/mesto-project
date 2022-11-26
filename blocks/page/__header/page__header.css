@@ -1,8 +1,8 @@
 .page__header {
     max-width: 100%;
     margin: 45px auto;
-    border-bottom: 1px solid #545454;  
-    padding-bottom: 33px;
+    border-bottom: 1px solid rgba(84, 84, 84, 1);  
+    padding-bottom: 32px;
 }
 
 
@@ -15,8 +15,8 @@
 
 @media screen and (max-width: 767px) {
     .page__header {
-        width: 100%;
+        max-width: 100%;
         margin-top: 28px;
-        margin-bottom: 42px;
+        padding-bottom: 27px;
     }
 }

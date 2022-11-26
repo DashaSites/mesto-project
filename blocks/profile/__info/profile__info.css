@@ -4,13 +4,17 @@
 }
 
 
+@media screen and (max-width: 1023px) {
+    .profile__info {
+        margin-left: auto;
+    }
+}
+
 @media screen and (max-width: 767px) {
     .profile__info {
         max-width: 88.12%;
         margin-top: 26px;
-        margin-right: auto;
-        margin-bottom: 36px;
-        margin-left: auto;
+        margin-bottom: 29px;
         text-align: center;
     }
 }
