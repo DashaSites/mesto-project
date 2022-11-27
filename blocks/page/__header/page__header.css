@@ -1,7 +1,7 @@
 .page__header {
     max-width: 100%;
     margin: 45px auto;
-    border-bottom: 1px solid rgba(84, 84, 84, 1);  
+    border-bottom: 1px solid rgba(84, 84, 84, .7);  
     padding-bottom: 32px;
 }
 
