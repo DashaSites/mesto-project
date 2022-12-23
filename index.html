@@ -16,7 +16,7 @@
         <img class="profile__avatar" src="./images/avatar.jpg" alt="Фото пользователя">
         <div class="profile__info">
           <div class="profile__name-block">
-            <h1 class="profile__name">Жак-Ив Кусто</h1>
+            <h1 class="profile__name">Дед Пихто</h1>
             <button class="profile__edit-button" type="button" aria-label="edit-profile"></button>
           </div>
           <p class="profile__occupation">Исследователь океана</p>
@@ -24,63 +24,51 @@
         <button class="profile__add-button" type="button" aria-label="add-card"></button>
       </section>
       <section class="elements content__elements">
-        <article class="element">
-          <img class="element__image" src="./images/nairobi.jpg" alt="Пастух в Найроби">
-          <div class="element__details">
-            <h2 class="element__caption">Найроби</h2>
-            <button class="element__like-button" type="button" aria-label="like"></button>
-          </div>
-        </article>
-        <article class="element">
-          <img class="element__image" src="./images/stonetown.jpg" alt="Котята спят в горшке">
-          <div class="element__details">
-            <h2 class="element__caption">Занзибар</h2>
-            <button class="element__like-button" type="button" aria-label="like"></button>
-          </div>
-        </article>
-        <article class="element">
-          <img class="element__image" src="./images/hidden-leopard.jpg" alt="Леопард крадется в саванне">
-          <div class="element__details">
-            <h2 class="element__caption">Серенгети</h2>
-            <button class="element__like-button" type="button" aria-label="like"></button>
-          </div>
-        </article>
-        <article class="element">
-          <img class="element__image" src="./images/serengeti.jpg" alt="Даман сидит на скале">
-          <div class="element__details">
-            <h2 class="element__caption">Где-то</h2>
-            <button class="element__like-button" type="button" aria-label="like"></button>
-          </div>
-        </article>
-        <article class="element">
-          <img class="element__image" src="./images/kilwa.jpg" alt="Вид на небо из древней мечети">
-          <div class="element__details">
-            <h2 class="element__caption">Килва-Кисивани</h2>
-            <button class="element__like-button" type="button" aria-label="like"></button>
-          </div>
-        </article>
-        <article class="element">
-          <img class="element__image" src="./images/hippos.jpg" alt="Бегемоты в озере">
-          <div class="element__details">
-            <h2 class="element__caption">Тарангире</h2>
-            <button class="element__like-button" type="button" aria-label="like"></button>
-          </div>
-        </article>
+
       </section>
     </main>
     <footer class="footer page__footer">
       <p class="footer__content">&copy; 2022 Mesto Russia</p>
     </footer>
-    <div class="popup">
+    <div class="popup popup_type_edit-profile"> <!-- Попап редактирования профиля -->
       <div class="popup__container">
-        <form class="popup__form" name="edit-profile-form">
+        <form class="popup__form popup__form_type_edit-profile" name="edit-profile-form">
           <h2 class="popup__form-title">Редактировать профиль</h2>
           <input class="popup__form-input-item popup__form-input-item_type_name" type="text" name="name" value="Жак-Ив-Кусто">
           <input class="popup__form-input-item popup__form-input-item_type_occupation" type="text" name="occupation" value="Исследователь океана">
           <button class="popup__submit-button" type="submit">Сохранить</button>
         </form>
-        <button class="popup__close-button" type="button"></button>
+        <button class="popup__close-button popup__close-button-edit-profile" type="button"></button>
       </div>
     </div>
+    <div class="popup popup_type_add-card"> <!-- Попап доблавения новой карточки -->
+      <div class="popup__container">
+        <form class="popup__form popup__form_type_add-card" name="add-card-form">
+          <h2 class="popup__form-title">Новое место</h2>
+          <input class="popup__form-input-item popup__form-input-item_type_title" type="text" name="title" placeholder="Название">
+          <input class="popup__form-input-item popup__form-input-item_type_link" type="text" name="link" placeholder="Ссылка на картинку">
+          <button class="popup__submit-button" type="submit">Создать</button>
+        </form>
+        <button class="popup__close-button popup__close-button-add-card" type="button"></button>
+      </div>
+    </div>
+    <div class="popup popup_type_large-image"> <!-- Попап с картинкой -->
+      <div class="popup__content">
+        <img class="popup__image" src="#" alt="Описание изображения">
+        <p class="popup__caption"></p>
+        <button class="popup__close-button popup__close-button-large-image" type="button"></button>
+      </div>
+    </div>
+    <template class="element-template">
+      <article class="element">
+        <img class="element__image" src="#" alt="Описание картинки">
+        <button class="element__delete-button" type="button" aria-label="delete"></button>
+        <div class="element__details">
+          <h2 class="element__caption"></h2>
+          <button class="element__like-button" type="button" aria-label="like"></button>
+        </div>
+      </article>
+    </template>
+  <script src="./scripts/index.js"></script>
 </body>
 </html>

@@ -1,0 +1,9 @@
+.popup__caption {
+    margin: 0;
+    margin-top: 10px;
+    padding: 0;
+    color: #fff;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: left;
+}
