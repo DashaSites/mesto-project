@@ -44,8 +44,14 @@
 @import url('../blocks/popup/__form/popup__form.css');
 @import url('../blocks/popup/__form-title/popup__form-title.css');
 @import url('../blocks/popup/__form-input-item/popup__form-input-item.css');
+@import url('../blocks/popup/__form-input-item/_type/popup__form-input-item_type_error.css');
 @import url('../blocks/popup/__submit-button/popup__submit-button.css');
 @import url('../blocks/popup/__close-button/popup__close-button.css');
 @import url('../blocks/popup/__image/popup__image.css');
 @import url('../blocks/popup/__caption/popup__caption.css');
 @import url('../blocks/popup/__content/popup__content.css');
+
+/* ERROR */
+@import url('../blocks/error/error.css');
+@import url('../blocks/error/_visible/error_visible.css');
+

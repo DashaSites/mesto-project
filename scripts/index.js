@@ -18,6 +18,7 @@ const popupInputTitle = formAddCard.querySelector('.popup__form-input-item_type_
 const popupInputLink = formAddCard.querySelector('.popup__form-input-item_type_link'); // Инпут ссылки в попапе-2
 const popupImage = imagePopup.querySelector('.popup__image'); // Картинка в попапе-3
 const popupCaption = imagePopup.querySelector('.popup__caption'); // Подпись в попапе-3
+const popupElements = document.querySelectorAll('.popup'); // Все попапы
 
 // Массив с 6 карточками "из коробки"
 const initialCards = [
@@ -51,6 +52,8 @@ const initialCards = [
 // Функция открытия любого попапа (нужный попап передается сюда через аргумент)
 const openPopup = (popup) => {
     popup.classList.add('popup_opened');
+
+    document.addEventListener('keydown', closePopupByEsc);
 }
 
 
@@ -87,6 +90,8 @@ closeButtons.forEach((button) => {
 // Функция закрытия (любого) попапа
 const closePopup = (popup) => {
     popup.classList.remove('popup_opened');
+
+    document.removeEventListener('keydown', closePopupByEsc);
 }
 
 
@@ -188,3 +193,36 @@ const renderInitialCards = (cards) => {
 
 // Вызываем функцию выкладывания начального массива
 renderInitialCards(initialCards);
+
+
+// Функция закрытия попапов по оверлею
+
+popupElements.forEach((popupElement) => {
+  popupElement.addEventListener('click', (event) => {
+    if (event.target.classList.contains('popup')) { // Проверяем, по какому именно элементу произошел клик
+      closePopup(popupElement); // Если был кликнут верхний слой (с классом popup), то закрываем попап
+    }
+  });
+});
+
+
+// Функция запрутия любого попапа нажатием на Esc
+const closePopupByEsc = (event) => {
+  if (event.key === 'Escape') {
+    closePopup(document.querySelector('.popup_opened'));
+  }
+}
+
+
+
+////////// ВАЛИДАЦИЯ ФОРМ //////////
+
+const validationConfig = {
+  formSelector: '.popup__form', // Форма в попапе
+  inputSelector: '.popup__form-input-item', // Любой инпут в любой форме
+  submitButtonSelector: '.popup__submit-button', // Кнопка сабмита формы в попапе
+  disabledButtonClass: 'popup__submit-button_disabled', // Задизейбленная кнопка сабмита формы в попапе
+  inputErrorClass: 'popup__form-input-item_type_error',
+  errorClass: 'error_visible'
+}
+
