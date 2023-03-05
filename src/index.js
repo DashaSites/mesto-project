@@ -1,3 +1,13 @@
+import { enableValidation } from './validate.js'
+import nairobi from './images/nairobi.jpg';
+import stonetown from './images/stonetown.jpg';
+import hiddenLeopard from './images/hidden-leopard.jpg';
+import serengeti from './images/serengeti.jpg';
+import kilwa from './images/kilwa.jpg';
+import hippos from './images/hippos.jpg';
+
+// ПЕРЕМЕННЫЕ
+
 const buttonEditProfileOpen = document.querySelector('.profile__edit-button'); // Кнопка, открывающая попап редактирования профиля
 const buttonAddCardOpen = document.querySelector('.profile__add-button'); // Кнопка, открывающая попап добавления новой карточки 
 const popupEditProfile = document.querySelector('.popup_type_edit-profile'); // Попап редактирования профиля
@@ -24,30 +34,32 @@ const popupElements = document.querySelectorAll('.popup'); // Все попап�
 const initialCards = [
     {
       caption: 'Найроби',
-      image: './images/nairobi.jpg'
+      image: nairobi
     },
     {
       caption: 'Занзибар',
-      image: './images/stonetown.jpg'
+      image: stonetown
     },
     {
       caption: 'Серенгети',
-      image: './images/hidden-leopard.jpg'
+      image: hiddenLeopard
     },
     {
       caption: 'Где-то',
-      image: './images/serengeti.jpg'
+      image: serengeti
     },
     {
       caption: 'Килва-Кисивани',
-      image: './images/kilwa.jpg'
+      image: kilwa
     },
     {
       caption: 'Тарангире',
-      image: './images/hippos.jpg'
+      image: hippos
     }
   ];
 
+
+// ФУНКЦИИ
 
 // Функция открытия любого попапа (нужный попап передается сюда через аргумент)
 const openPopup = (popup) => {
@@ -177,7 +189,6 @@ const createCard = (card) => {
   //cardImage.addEventListener('click', handlerImageClick);
   cardImage.addEventListener('click', () => handlerImageClick(card));
 
-
   return cardElement;
 }
 
@@ -215,14 +226,19 @@ const closePopupByEsc = (event) => {
 
 
 
-////////// ВАЛИДАЦИЯ ФОРМ //////////
+// ВАЛИДАЦИЯ ФОРМ: ЗДЕСЬ ТОЛЬКО ОБЪЕКТ С НАСТРОЙКАМИ И ВЫЗОВ ФУНКЦИИ ENABLEVALIDATION
 
+// Создаем объект конфига, в который собираем все для валидации форм
 const validationConfig = {
   formSelector: '.popup__form', // Форма в попапе
   inputSelector: '.popup__form-input-item', // Любой инпут в любой форме
   submitButtonSelector: '.popup__submit-button', // Кнопка сабмита формы в попапе
-  disabledButtonClass: 'popup__submit-button_disabled', // Задизейбленная кнопка сабмита формы в попапе
-  inputErrorClass: 'popup__form-input-item_type_error',
-  errorClass: 'error_visible'
+  disabledButtonClass: 'popup__submit-button_disabled', // Модификатор, дизейблящий кнопку сабмита формы
+  inputErrorClass: 'popup__form-input-item_type_error', // Модификатор для невалидного инпута
+  errorClass: 'error_visible' // Модификатор, показывающий сообщение об ошибке
 }
 
+
+
+// Вызов функции для включения валидации всех форм (передаем ей параметром необходимый объект настроек)
+enableValidation(validationConfig);

@@ -9,11 +9,11 @@
 </head>
 <body class="page">
   <header class="header page__header">
-  <img class="header__logo" src="./images/logo.svg" alt="Логотип Mesto">
+  <img class="header__logo" src="<%=require('./images/logo.svg')%>" alt="Логотип Mesto">
     </header>
     <main class="content">
       <section class="profile content__profile">
-        <img class="profile__avatar" src="./images/avatar.jpg" alt="Фото пользователя">
+        <img class="profile__avatar" src="<%=require('./images/avatar.jpg')%>" alt="Фото пользователя">
         <div class="profile__info">
           <div class="profile__name-block">
             <h1 class="profile__name">Кое-кто</h1>
@@ -34,9 +34,9 @@
       <div class="popup__container">
         <form class="popup__form popup__form_type_edit-profile" name="edit-profile-form">
           <h2 class="popup__form-title">Редактировать профиль</h2>
-          <input id="user-name" class="popup__form-input-item popup__form-input-item_type_name" type="text" name="name" value="Жак-Ив-Кусто" minlength="2" maxlength="40" required>
+          <input id="user-name" pattern="^[a-zA-Zа-яА-Я\-\s]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" class="popup__form-input-item popup__form-input-item_type_name" type="text" name="name" value="Жак-Ив-Кусто" minlength="2" maxlength="40" required>
           <span id="user-name-error" class="error"></span>
-          <input id="user-occupation" class="popup__form-input-item popup__form-input-item_type_occupation" type="text" name="occupation" value="Исследователь океана" minlength="2" maxlength="200" required>
+          <input id="user-occupation" pattern="^[a-zA-Zа-яА-Я\-\s]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" class="popup__form-input-item popup__form-input-item_type_occupation" type="text" name="occupation" value="Исследователь океана" minlength="2" maxlength="200" required>
           <span id="user-occupation-error" class="error"></span>
           <button class="popup__submit-button" type="submit">Сохранить</button>
         </form>
@@ -47,7 +47,7 @@
       <div class="popup__container">
         <form class="popup__form popup__form_type_add-card" name="add-card-form">
           <h2 class="popup__form-title">Новое место</h2>
-          <input id="card-title" class="popup__form-input-item popup__form-input-item_type_title" type="text" name="title" placeholder="Название" minlength="2" maxlength="30" required>
+          <input id="card-title" pattern="^[a-zA-Zа-яА-Я\-\s]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" class="popup__form-input-item popup__form-input-item_type_title" type="text" name="title" placeholder="Название" minlength="2" maxlength="30" required>
           <span id="card-title-error" class="error"></span>
           <input id="link" class="popup__form-input-item popup__form-input-item_type_link" type="url" name="link" placeholder="Ссылка на картинку" required>
           <span id="link-error" class="error"></span>
@@ -73,6 +73,5 @@
         </div>
       </article>
     </template>
-  <script src="./scripts/index.js"></script>
 </body>
 </html>
