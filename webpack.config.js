@@ -1,20 +1,23 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: { main: './src/index.js' },
+  entry: {
+    main: './src/index.js'
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js',
-        publicPath: ''
+    publicPath: '',
   },
-    mode: 'development',
+  mode: 'development',
   devServer: {
     static: path.resolve(__dirname, './dist'),
+    open: true,
     compress: true,
-    port: 8081,
-    open: true
+    port: 8081
   },
   module: {
     rules: [{
@@ -22,19 +25,30 @@ module.exports = {
         use: 'babel-loader',
         exclude: '/node_modules/'
       },
-      // добавили правило для обработки файлов
       {
-        // регулярное выражение, которое ищет все файлы с такими расширениями
         test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
-        type: 'asset/resource'
+        type: 'asset/resource',
       },
-    ] 
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          },
+          'postcss-loader'
+        ]
+      },
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html'
     }),
-        new CleanWebpackPlugin(),
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(),
+
   ]
-}; 
+}
   

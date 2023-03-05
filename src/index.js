@@ -5,6 +5,7 @@ import hiddenLeopard from './images/hidden-leopard.jpg';
 import serengeti from './images/serengeti.jpg';
 import kilwa from './images/kilwa.jpg';
 import hippos from './images/hippos.jpg';
+import './pages/index.css';
 
 // ПЕРЕМЕННЫЕ
 
