@@ -40,6 +40,7 @@
 /* POPUP */
 @import url('../blocks/popup/popup.css');
 @import url('../blocks/popup/_opened/popup_opened.css');
+@import url('../blocks/popup/_type/popup_type_large-image.css');
 @import url('../blocks/popup/__container/popup__container.css');
 @import url('../blocks/popup/__form/popup__form.css');
 @import url('../blocks/popup/__form-title/popup__form-title.css');

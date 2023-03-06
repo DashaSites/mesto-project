@@ -19,7 +19,12 @@
 
 .popup__submit-button:hover {
     cursor: pointer;
-    opacity: .8;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.popup__submit-button:disabled {
+    background-color: #e5e5e5;
+    cursor: default;
 }
 
 

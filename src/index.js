@@ -1,4 +1,7 @@
-import { enableValidation } from './validate.js'
+import { enableValidation } from './components/validate.js';
+import { toggleLike, deleteCard, createCard } from './components/card.js';
+import { handleButtonEditProfileOpen, handleButtonAddCardOpen, submitFormEditProfile, submitFormAddCard, handlerImageClick, closePopupByEsc } from './components/modal.js';
+import { openPopup, closePopup } from './components/utils.js';
 import nairobi from './images/nairobi.jpg';
 import stonetown from './images/stonetown.jpg';
 import hiddenLeopard from './images/hidden-leopard.jpg';
@@ -62,30 +65,9 @@ const initialCards = [
 
 // ФУНКЦИИ
 
-// Функция открытия любого попапа (нужный попап передается сюда через аргумент)
-const openPopup = (popup) => {
-    popup.classList.add('popup_opened');
-
-    document.addEventListener('keydown', closePopupByEsc);
-}
-
-
-// Обработчик кликов по кнопке редактирования профиля
-const handleButtonEditProfileOpen = () => {
-    openPopup(popupEditProfile);
-    nameInput.value = profileName.textContent;
-    jobInput.value = profileOccupation.textContent; 
-}
-
-
 // Слушатель кликов по кнопке редактирования профиля
 buttonEditProfileOpen.addEventListener('click', handleButtonEditProfileOpen);
 
-
-// Обработчик кликов по кнопке добавления новой карточки
-const handleButtonAddCardOpen = () => {
-  openPopup(popupAddCard);
-}
 
 // Слушатель кликов по кнопке добавления новой карточки
 buttonAddCardOpen.addEventListener('click', handleButtonAddCardOpen);
@@ -100,115 +82,7 @@ closeButtons.forEach((button) => {
 });
 
 
-// Функция закрытия (любого) попапа
-const closePopup = (popup) => {
-    popup.classList.remove('popup_opened');
-
-    document.removeEventListener('keydown', closePopupByEsc);
-}
-
-
-// Обработчик отправки формы редактирования профиля
-const submitFormEditProfile = (event) => {
-    event.preventDefault();
-  
-    profileName.textContent = nameInput.value;
-    profileOccupation.textContent = jobInput.value;
-
-    closePopup(popupEditProfile);
-}
-
-
-// Слушатель кликов по кнопке "Сохранить" в попапе редактирования профиля
-formEditProfile.addEventListener('submit', submitFormEditProfile);
-
-
-// Обработчик сабмита формы с новой карточкой
-const submitFormAddCard = (event) => {
-  event.preventDefault();
-
-  const newCard = {};
-  newCard.caption = popupInputTitle.value;
-  newCard.image = popupInputLink.value;
-  cardsContainer.prepend(createCard(newCard));
-
-  event.target.reset();
-  
-  closePopup(popupAddCard);
-}
-
-
-// Слушатель кликов по кнопке "Создать" в попапе добавления новой карточки
-formAddCard.addEventListener('submit', submitFormAddCard);
-
-
-// Ставим/убираем лайк 
-const toggleLike = (event) => {
-  event.target.classList.toggle('element__like-button_active');
-}
-
-
-// Удаляем карточку
-const deleteCard = (event) => {
-  event.target.closest('.element').remove();
-}
-
-/*
-// Обработчик клика по картинке (чтобы открыть попап-3)
-const handlerImageClick = (event) => {
-  openPopup(imagePopup);
-  const item = event.target;
-  popupImage.src = item.src;
-  popupImage.alt = item.alt;
-  popupCaption.textContent = item.alt;
-} 
-*/
-
-// Обработчик клика по картинке (чтобы открыть попап-3)
-const handlerImageClick = ({image, caption}) => { 
-  openPopup(imagePopup);
-
-  popupImage.src = image;
-  popupImage.alt = caption;
-  popupCaption.textContent = caption;
-}
-
-
-// Создаем карточку
-const createCard = (card) => {
-  const cardTemplate = document.querySelector('.element-template').content;
-  const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
-  const cardImage = cardElement.querySelector('.element__image');
-
-  cardImage.src = card.image;
-  cardImage.alt = card.caption;
-
-  cardElement.querySelector('.element__caption').textContent = card.caption;
-
-  cardElement.querySelector('.element__like-button').addEventListener('click', toggleLike);
-  cardElement.querySelector('.element__delete-button').addEventListener('click', deleteCard);
-  //cardImage.addEventListener('click', handlerImageClick);
-  cardImage.addEventListener('click', () => handlerImageClick(card));
-
-  return cardElement;
-}
-
-
-// Выкладываем начальный массив карт
-const renderInitialCards = (cards) => {
-
-  cards.forEach((initialCard) => {
-    cardsContainer.append(createCard(initialCard));
-  });
-}
-
-
-// Вызываем функцию выкладывания начального массива
-renderInitialCards(initialCards);
-
-
 // Функция закрытия попапов по оверлею
-
 popupElements.forEach((popupElement) => {
   popupElement.addEventListener('click', (event) => {
     if (event.target.classList.contains('popup')) { // Проверяем, по какому именно элементу произошел клик
@@ -218,17 +92,16 @@ popupElements.forEach((popupElement) => {
 });
 
 
-// Функция запрутия любого попапа нажатием на Esc
-const closePopupByEsc = (event) => {
-  if (event.key === 'Escape') {
-    closePopup(document.querySelector('.popup_opened'));
-  }
-}
+// Слушатель кликов по кнопке "Сохранить" в попапе редактирования профиля
+formEditProfile.addEventListener('submit', submitFormEditProfile);
+
+
+// Слушатель кликов по кнопке "Создать" в попапе добавления новой карточки
+formAddCard.addEventListener('submit', submitFormAddCard);
 
 
 
 // ВАЛИДАЦИЯ ФОРМ: ЗДЕСЬ ТОЛЬКО ОБЪЕКТ С НАСТРОЙКАМИ И ВЫЗОВ ФУНКЦИИ ENABLEVALIDATION
-
 // Создаем объект конфига, в который собираем все для валидации форм
 const validationConfig = {
   formSelector: '.popup__form', // Форма в попапе
@@ -240,6 +113,21 @@ const validationConfig = {
 }
 
 
+// Выкладываем начальный массив карт
+const renderInitialCards = (cards) => {
+  
+  cards.forEach((initialCard) => {
+    cardsContainer.append(createCard(initialCard));
+  });
+}
+
+
+// ВЫЗОВЫ ФУНКЦИЙ
+
+// Вызываем функцию выкладывания начального массива
+renderInitialCards(initialCards);
 
 // Вызов функции для включения валидации всех форм (передаем ей параметром необходимый объект настроек)
 enableValidation(validationConfig);
+
+export { popupEditProfile, popupAddCard, imagePopup, nameInput, jobInput, profileName, profileOccupation, popupImage, popupCaption, popupInputTitle, popupInputLink, cardsContainer, handlerImageClick };

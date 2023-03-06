@@ -57,14 +57,6 @@ const showInputError = (inputElement, errorElement, inputErrorClass, errorClass)
     });
   };
   
-
-  // Проверяем на всякий случай, вдруг все инпуты формы - пустые
-  const hasNotInputValues = (inputList) => {
-    return inputList.every(inputElement => {
-      return inputElement.value.length === 0;
-    });
-  };
-  
   
   // Дизейблим кнопку сабмита:
   const disableSubmitButton = (buttonElement, disabledButtonClass) => {
@@ -83,13 +75,13 @@ const showInputError = (inputElement, errorElement, inputErrorClass, errorClass)
   
   
   // Переключатель состояния кнопки сабмита:
-  const toggleButtonState = (formElement, inputList, submitButtonSelector, disabledButtonClass) => {
+  const toggleButtonState = (formElement, inputList, submitButtonSelector, disabledButtonClass, buttonElement) => {
     
     // Создадим переменную для кнопки сабмита в форме (в той форме, с которой сейчас работаем):
-    const buttonElement = formElement.querySelector(submitButtonSelector);
+    //const buttonElement = formElement.querySelector(submitButtonSelector);
   
     // Если из всех полей данной формы какое-то сейчас невалидно или если все поля формы пустые - то дизейблим кнопку сабмита
-    if (hasInvalidInput(inputList) || hasNotInputValues(inputList)) {
+    if (hasInvalidInput(inputList)) {
       disableSubmitButton(buttonElement, disabledButtonClass);
     } else {
     // В противном случае - активируем кнопку сабмита
@@ -100,6 +92,9 @@ const showInputError = (inputElement, errorElement, inputErrorClass, errorClass)
   
   // Слушатель всех событий. В нем объявлены 2 функции, которые и исполняются:
   const setEventListeners = (formElement, inputSelector, submitButtonSelector, inputErrorClass, errorClass, disabledButtonClass) => {
+
+    // Сразу как попали в форму, создаем переменную для кнопки сабмита в ней (в той форме, с которой сейчас работаем):
+    const buttonElement = formElement.querySelector(submitButtonSelector);
     
     // Слушатель сабмита формы
     formElement.addEventListener('submit', (event) => {
@@ -107,7 +102,7 @@ const showInputError = (inputElement, errorElement, inputErrorClass, errorClass)
       event.preventDefault();
   
       // Когда произошел сабмит формы, дизейблим кнопку сабмита
-      toggleButtonState(formElement, inputList, submitButtonSelector, disabledButtonClass);
+      toggleButtonState(formElement, inputList, submitButtonSelector, disabledButtonClass, buttonElement);
     });
   
     // Создадим массив из коллекции всех полей формы, и запишем его в переменную inputList:
@@ -119,11 +114,11 @@ const showInputError = (inputElement, errorElement, inputErrorClass, errorClass)
         // Для каждого инпута вызовем функцию checkInputValidity (она объявлена выше),
         // и вызовем функцию-переключатель состояния кнопки сабмита формы (объявлена выше)
         checkInputValidity(formElement, inputElement, inputErrorClass, errorClass);
-        toggleButtonState(formElement, inputList, submitButtonSelector, disabledButtonClass);
+        toggleButtonState(formElement, inputList, submitButtonSelector, disabledButtonClass, buttonElement);
       });
     });
     
-    toggleButtonState(formElement, inputList, submitButtonSelector, disabledButtonClass);
+    toggleButtonState(formElement, inputList, submitButtonSelector, disabledButtonClass, buttonElement);
   }
   
   
