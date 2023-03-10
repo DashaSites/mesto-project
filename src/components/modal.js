@@ -1,7 +1,7 @@
 import { popupEditProfile, popupAddCard, imagePopup, nameInput, jobInput, profileName, profileOccupation, popupImage, popupCaption, popupInputTitle, popupInputLink, cardsContainer } from '../index.js';
 import { openPopup, closePopup } from './utils.js';
 import { createCard } from './card.js';
-import { updateUserInfo } from './api.js';
+import { updateUserInfo, createCardOnServer } from './api.js';
 
 // ФУНКЦИИ, СВЯЗАННЫЕ С РАБОТОЙ ПОПАПОВ
 
@@ -49,7 +49,14 @@ const submitFormAddCard = (event) => {
     const newCard = {};
     newCard.name = popupInputTitle.value;
     newCard.link = popupInputLink.value;
-    cardsContainer.prepend(createCard(newCard));
+
+    createCardOnServer(newCard)
+    .then((newCard) => {
+        cardsContainer.prepend(createCard(newCard));
+    })
+    .catch((err) => console.log(err));
+
+    //cardsContainer.prepend(createCard(newCard)); Это работало до подключения к серверу. Стояло вместо вызова функции createCardOnServer(newCard), что выше
   
     event.target.reset();
     

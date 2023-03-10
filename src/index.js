@@ -113,6 +113,8 @@ const validationConfig = {
   errorClass: 'error_visible' // Модификатор, показывающий сообщение об ошибке
 }
 
+let currentUserId; // Запишем в эту переменную id текущего пользователя, чтобы использовать его позже при создании карты 
+
 
 // Выкладываем начальный массив карт и берем с сервера информацию о пользователе
 const renderInitialCards = (cards) => {
@@ -120,16 +122,20 @@ const renderInitialCards = (cards) => {
   // начальной информации о пользователе и начального массива карточек
   getInitialData()
   .then(([user, cards]) => {
-    // Выкладываем начальный массив карточек, берем его с сервера
-    cards.forEach((initialCard) => {
-       cardsContainer.append(createCard(initialCard));
-    });
+
     // Берем с сервера и отрисовываем (выкладываем) начальную информацию о пользователе
     profileName.textContent = user.name;
     profileOccupation.textContent = user.about;
+    currentUserId = user._id;
+
+    // Выкладываем начальный массив карточек, берем его с сервера
+    cards.forEach((initialCard) => {
+       cardsContainer.append(createCard(initialCard.link, initialCard.name, initialCard.likes, initialCard.owner._id, initialCard._id));
+    });
   })
   .catch(err => console.log(err));
 }
+ 
 
 ////////// ОБРАТАТЫВАЕМ ЗАПРОСЫ С СЕРВЕРА!!!!!!!!!!
 // Выводим в консоль разом и начальное юзеринфо, и карточки, которые получили с сервера
@@ -138,25 +144,6 @@ getInitialData()
   console.log(user, cards);
 })
 .catch(err => console.log(err));
-
-// Обновить/сохранить в шапке профиля данные пользователя из попапа
-
-
-/*
-// Выводим в консоль начальное юзеринфо, полученное с сервера
-getCurrentUser()
-.then((res) => console.log(res))
-.catch((err) => console.log(err));
-
-//Выводим в консоль начальные карточки, полученные с сервера
-getInitialCards()
-.then((res) => console.log(res))
-.catch((err) => console.log(err));
-*/
-
-
-
-
 
 
 
@@ -173,4 +160,4 @@ renderInitialCards(initialCards);
 // Вызов функции для включения валидации всех форм (передаем ей параметром необходимый объект настроек)
 enableValidation(validationConfig);
 
-export { popupEditProfile, popupAddCard, imagePopup, nameInput, jobInput, profileName, profileOccupation, popupImage, popupCaption, popupInputTitle, popupInputLink, cardsContainer, handlerImageClick };
+export { popupEditProfile, popupAddCard, imagePopup, nameInput, jobInput, profileName, profileOccupation, popupImage, popupCaption, popupInputTitle, popupInputLink, cardsContainer, handlerImageClick, currentUserId };

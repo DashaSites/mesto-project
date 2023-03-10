@@ -53,3 +53,24 @@ export const updateUserInfo = (user) => {
     .then((res) => getResponseData(res))
     .catch((err) => console.log(err));
 }
+
+
+// Добавляем на сервер новую карточку (загружаем ее из попапа-2)
+export const createCardOnServer = (newCard) => {
+    return fetch(`${config.baseUrl}/cards`, {
+        method: 'POST',
+        headers: config.headers,
+        body: JSON.stringify({
+            name: newCard.name,
+            link: newCard.link
+          })
+    })
+    .then((res) => getResponseData(res))
+    .catch((err) => console.log(err));
+}
+
+
+// Отображение количества лайков карточки
+ const showLikesCount = () => {
+    fetch(``)
+ }

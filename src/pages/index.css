@@ -30,9 +30,14 @@
 @import url('../blocks/element/__image/element__image.css');
 @import url('../blocks/element/__details/element__details.css');
 @import url('../blocks/element/__caption/element__caption.css');
+@import url('../blocks/element/__likes-block/element__likes-block.css');
 @import url('../blocks/element/__like-button/element__like-button.css');
+@import url('../blocks/element/__like-counter/element__like-counter.css');
 @import url('../blocks/element/__like-button/_active/element__like-button_active.css');
 @import url('../blocks/element/__delete-button/element__delete-button.css');
+@import url('../blocks/element/__delete-button/_visible/element__delete-button_visible.css');
+@import url('../blocks/element/__delete-button/_hidden/element__delete-button_hidden.css');
+
 
 /* FOOTER */
 @import url('../blocks/footer/__content/footer__content.css');

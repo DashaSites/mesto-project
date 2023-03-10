@@ -1,9 +1,9 @@
 .element__details {
     max-width: 87.2%;
-    margin-top: 20px;
-    margin-bottom: 26px;
+    margin-top: 22px;
+    margin-bottom: 22px;
     margin-left: 21px;
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
 }
