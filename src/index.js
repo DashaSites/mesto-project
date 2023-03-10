@@ -2,6 +2,7 @@ import { enableValidation } from './components/validate.js';
 import { toggleLike, deleteCard, createCard } from './components/card.js';
 import { handleButtonEditProfileOpen, handleButtonAddCardOpen, submitFormEditProfile, submitFormAddCard, handlerImageClick, closePopupByEsc } from './components/modal.js';
 import { openPopup, closePopup } from './components/utils.js';
+import { getInitialData, getCurrentUser, getInitialCards } from './components/api.js';
 import nairobi from './images/nairobi.jpg';
 import stonetown from './images/stonetown.jpg';
 import hiddenLeopard from './images/hidden-leopard.jpg';
@@ -37,28 +38,28 @@ const popupElements = document.querySelectorAll('.popup'); // Все попап�
 // Массив с 6 карточками "из коробки"
 const initialCards = [
     {
-      caption: 'Найроби',
-      image: nairobi
+      name: 'Найроби',
+      link: nairobi
     },
     {
-      caption: 'Занзибар',
-      image: stonetown
+      name: 'Занзибар',
+      link: stonetown
     },
     {
-      caption: 'Серенгети',
-      image: hiddenLeopard
+      name: 'Серенгети',
+      link: hiddenLeopard
     },
     {
-      caption: 'Где-то',
-      image: serengeti
+      name: 'Где-то',
+      link: serengeti
     },
     {
-      caption: 'Килва-Кисивани',
-      image: kilwa
+      name: 'Килва-Кисивани',
+      link: kilwa
     },
     {
-      caption: 'Тарангире',
-      image: hippos
+      name: 'Тарангире',
+      link: hippos
     }
   ];
 
@@ -113,15 +114,57 @@ const validationConfig = {
 }
 
 
-// Выкладываем начальный массив карт
+// Выкладываем начальный массив карт и берем с сервера информацию о пользователе
 const renderInitialCards = (cards) => {
-  
-  cards.forEach((initialCard) => {
-    cardsContainer.append(createCard(initialCard));
-  });
+  // Вызываем функцию, которая делает запрос к серверу на получение 
+  // начальной информации о пользователе и начального массива карточек
+  getInitialData()
+  .then(([user, cards]) => {
+    // Выкладываем начальный массив карточек, берем его с сервера
+    cards.forEach((initialCard) => {
+       cardsContainer.append(createCard(initialCard));
+    });
+    // Берем с сервера и отрисовываем (выкладываем) начальную информацию о пользователе
+    profileName.textContent = user.name;
+    profileOccupation.textContent = user.about;
+  })
+  .catch(err => console.log(err));
 }
 
+////////// ОБРАТАТЫВАЕМ ЗАПРОСЫ С СЕРВЕРА!!!!!!!!!!
+// Выводим в консоль разом и начальное юзеринфо, и карточки, которые получили с сервера
+getInitialData()
+.then(([user, cards]) => {
+  console.log(user, cards);
+})
+.catch(err => console.log(err));
 
+// Обновить/сохранить в шапке профиля данные пользователя из попапа
+
+
+/*
+// Выводим в консоль начальное юзеринфо, полученное с сервера
+getCurrentUser()
+.then((res) => console.log(res))
+.catch((err) => console.log(err));
+
+//Выводим в консоль начальные карточки, полученные с сервера
+getInitialCards()
+.then((res) => console.log(res))
+.catch((err) => console.log(err));
+*/
+
+
+
+
+
+
+
+
+
+
+
+///////////////
 // ВЫЗОВЫ ФУНКЦИЙ
 
 // Вызываем функцию выкладывания начального массива

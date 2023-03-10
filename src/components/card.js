@@ -20,10 +20,10 @@ const createCard = (card) => {
     const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
     const cardImage = cardElement.querySelector('.element__image');
   
-    cardImage.src = card.image;
-    cardImage.alt = card.caption;
+    cardImage.src = card.link;
+    cardImage.alt = card.name;
   
-    cardElement.querySelector('.element__caption').textContent = card.caption;
+    cardElement.querySelector('.element__caption').textContent = card.name;
   
     cardElement.querySelector('.element__like-button').addEventListener('click', toggleLike);
     cardElement.querySelector('.element__delete-button').addEventListener('click', deleteCard);

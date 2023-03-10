@@ -1,6 +1,7 @@
 import { popupEditProfile, popupAddCard, imagePopup, nameInput, jobInput, profileName, profileOccupation, popupImage, popupCaption, popupInputTitle, popupInputLink, cardsContainer } from '../index.js';
 import { openPopup, closePopup } from './utils.js';
 import { createCard } from './card.js';
+import { updateUserInfo } from './api.js';
 
 // ФУНКЦИИ, СВЯЗАННЫЕ С РАБОТОЙ ПОПАПОВ
 
@@ -17,13 +18,25 @@ const handleButtonAddCardOpen = () => {
     openPopup(popupAddCard);
 }
 
-
+// СЮДА ЗАСУНУЛИ РЕЗУЛЬТАТЫ ПРОМИСА
 // Обработчик отправки формы редактирования профиля
 const submitFormEditProfile = (event) => {
     event.preventDefault();
+
+    const user = {};
+    user.name = nameInput.value;
+    user.about = jobInput.value;
+
+    updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
+    // (мы вставляем эти данные в шапку из попапа)
+    .then((user) => {
+        profileName.textContent = user.name;
+        profileOccupation.textContent = user.about;
+    })
+    .catch((err) => console.log(err));
   
-    profileName.textContent = nameInput.value;
-    profileOccupation.textContent = jobInput.value;
+    //profileName.textContent = nameInput.value; // Эта вставка данных работала до подключения к серверу
+    //profileOccupation.textContent = jobInput.value; // Эта вставка данных работала до подключения к серверу
 
     closePopup(popupEditProfile);
 }
@@ -34,8 +47,8 @@ const submitFormAddCard = (event) => {
     event.preventDefault();
   
     const newCard = {};
-    newCard.caption = popupInputTitle.value;
-    newCard.image = popupInputLink.value;
+    newCard.name = popupInputTitle.value;
+    newCard.link = popupInputLink.value;
     cardsContainer.prepend(createCard(newCard));
   
     event.target.reset();
@@ -45,12 +58,12 @@ const submitFormAddCard = (event) => {
 
 
 // Обработчик клика по картинке (чтобы открыть попап-3)
-const handlerImageClick = ({image, caption}) => { 
+const handlerImageClick = ({link, name}) => { 
     openPopup(imagePopup);
   
-    popupImage.src = image;
-    popupImage.alt = caption;
-    popupCaption.textContent = caption;
+    popupImage.src = link;
+    popupImage.alt = name;
+    popupCaption.textContent = name;
 }
 
 
