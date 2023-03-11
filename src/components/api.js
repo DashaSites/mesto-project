@@ -70,7 +70,31 @@ export const createCardOnServer = (newCard) => {
 }
 
 
-// Отображение количества лайков карточки
- const showLikesCount = () => {
-    fetch(``)
- }
+// Запрос на удаление карточки
+
+export const deleteCardOnServer = (id) => {
+    return fetch(`${config.baseUrl}/cards/${id}`, {
+        method: 'DELETE',
+        headers: config.headers
+    })
+    .then((res) => getResponseData(res))
+    .catch((err) => console.log(err))
+}
+
+
+// Обновление аватара пользователя
+const updateAvatar = (link) => {
+    return fetch(`${config.baseUrl}/users/me/avatar`, {
+        method: 'PATCH',
+        headers: config.headers,
+        body: JSON.stringify({
+            avatar: link
+          })
+    })
+    .then((res) => getResponseData(res))
+    .catch((err) => console.log(err));
+}
+
+
+
+

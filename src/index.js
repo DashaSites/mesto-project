@@ -15,9 +15,11 @@ import './pages/index.css';
 
 const buttonEditProfileOpen = document.querySelector('.profile__edit-button'); // Кнопка, открывающая попап редактирования профиля
 const buttonAddCardOpen = document.querySelector('.profile__add-button'); // Кнопка, открывающая попап добавления новой карточки 
+const buttonEditAvatar = document.querySelector('.profile__avatar'); // Кнопка, открывающая попап редактирования аватара
 const popupEditProfile = document.querySelector('.popup_type_edit-profile'); // Попап редактирования профиля
 const popupAddCard = document.querySelector('.popup_type_add-card'); // Попап добавления новой карточки
 const imagePopup = document.querySelector('.popup_type_large-image'); // Попап-3
+const popupEditAvatar = document.querySelector('.popup_type_edit-avatar'); // Попап редактирования аватара
 const buttonEditProfileClose = document.querySelector('.popup__close-button-edit-profile'); // Кнопка, закрывающая попап редактирования профиля
 const buttonAddCardClose = document.querySelector('.popup__close-button-add-card'); // Кнопка, закрывающая попап добавления карточки
 const buttonLargeImageClose = document.querySelector('.popup__close-button-large-image'); // Кнопка, закрывающая попап с большой картинкой
@@ -73,6 +75,9 @@ buttonEditProfileOpen.addEventListener('click', handleButtonEditProfileOpen);
 // Слушатель кликов по кнопке добавления новой карточки
 buttonAddCardOpen.addEventListener('click', handleButtonAddCardOpen);
 
+// Слушатель кликов по кнопке, открывающей попап редактирования аватара
+//buttonEditAvatar.addEventListener('click', handleButtonEditAvatar);
+
 
 // Единый слушатель кликов по крестикам попапов + обработчик кликов по соответствующему крестику
 closeButtons.forEach((button) => {
@@ -114,8 +119,6 @@ const validationConfig = {
 }
 
 let currentUserId; // Запишем в эту переменную id текущего пользователя, чтобы использовать его позже при создании карты 
-
-
 // Выкладываем начальный массив карт и берем с сервера информацию о пользователе
 const renderInitialCards = (cards) => {
   // Вызываем функцию, которая делает запрос к серверу на получение 
@@ -126,7 +129,7 @@ const renderInitialCards = (cards) => {
     // Берем с сервера и отрисовываем (выкладываем) начальную информацию о пользователе
     profileName.textContent = user.name;
     profileOccupation.textContent = user.about;
-    currentUserId = user._id;
+    currentUserId = user._id; // определяем id текущего пользователя
 
     // Выкладываем начальный массив карточек, берем его с сервера
     cards.forEach((initialCard) => {
@@ -160,4 +163,4 @@ renderInitialCards(initialCards);
 // Вызов функции для включения валидации всех форм (передаем ей параметром необходимый объект настроек)
 enableValidation(validationConfig);
 
-export { popupEditProfile, popupAddCard, imagePopup, nameInput, jobInput, profileName, profileOccupation, popupImage, popupCaption, popupInputTitle, popupInputLink, cardsContainer, handlerImageClick, currentUserId };
+export { popupEditProfile, popupAddCard, imagePopup, popupEditAvatar, nameInput, jobInput, profileName, profileOccupation, popupImage, popupCaption, popupInputTitle, popupInputLink, cardsContainer, handlerImageClick, currentUserId };

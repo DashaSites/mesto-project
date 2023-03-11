@@ -1,4 +1,4 @@
-import { popupEditProfile, popupAddCard, imagePopup, nameInput, jobInput, profileName, profileOccupation, popupImage, popupCaption, popupInputTitle, popupInputLink, cardsContainer } from '../index.js';
+import { popupEditProfile, popupAddCard, imagePopup, popupEditAvatar, nameInput, jobInput, profileName, profileOccupation, popupImage, popupCaption, popupInputTitle, popupInputLink, cardsContainer } from '../index.js';
 import { openPopup, closePopup } from './utils.js';
 import { createCard } from './card.js';
 import { updateUserInfo, createCardOnServer } from './api.js';
@@ -16,6 +16,11 @@ const handleButtonEditProfileOpen = () => {
 // Обработчик кликов по кнопке добавления новой карточки
 const handleButtonAddCardOpen = () => {
     openPopup(popupAddCard);
+}
+
+// Обработчик кликов по кнопке открытия попапа для редактирования аватара
+const handleButtonEditAvatar = () => {
+    openPopup(popupEditAvatar);
 }
 
 // СЮДА ЗАСУНУЛИ РЕЗУЛЬТАТЫ ПРОМИСА
@@ -83,4 +88,4 @@ const closePopupByEsc = (event) => {
 
 
 
-export { handleButtonEditProfileOpen, handleButtonAddCardOpen, submitFormEditProfile, submitFormAddCard, handlerImageClick, closePopupByEsc };
+export { handleButtonEditProfileOpen, handleButtonAddCardOpen, submitFormEditProfile, handleButtonEditAvatar, submitFormAddCard, handlerImageClick, closePopupByEsc };

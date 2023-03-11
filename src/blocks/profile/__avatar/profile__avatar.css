@@ -1,10 +1,36 @@
 .profile__avatar {
+    border: none;
     width: 120px;
     height: 120px;
-    object-fit: cover;
+    background-image: url(../../../images/avatar.jpg);
+    background-size: cover;
+    background-position: center;
     border-radius: 50%;
     margin-right: 30px;
+    position: relative;
 }
+
+.profile__avatar::before {
+    content: "";
+    background-color: #000;
+    opacity: 0;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: 0.2s;
+    min-height: 100%;
+}
+
+.profile__avatar:hover::before {
+    background-image: url('../../../images/pencil.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+
 
 
 @media screen and (max-width: 767px) {
@@ -12,3 +38,38 @@
         margin: 0 auto;
     }
 }
+
+
+
+
+
+/*
+.cover__link {
+    height: 100%;
+    position: relative;
+    background-image: url(../../../images/cover-trains.jpg);
+    background-size: cover;
+    background-position: center;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cover__link::before {
+    content: "";
+    background-color: #2A2C2F;
+    opacity: 0.3;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: 0.5s;
+    min-height: 100%;
+}
+
+.cover__link:hover::before {
+    cursor: pointer;
+    opacity: 0.8;
+}
+*/

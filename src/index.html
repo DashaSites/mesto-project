@@ -12,7 +12,7 @@
     </header>
     <main class="content">
       <section class="profile content__profile">
-        <img class="profile__avatar" src="<%=require('./images/avatar.jpg')%>" alt="Фото пользователя">
+        <button class="profile__avatar" type="button" aria-label="edit-avatar"></button>
         <div class="profile__info">
           <div class="profile__name-block">
             <h1 class="profile__name">Дед Пихто</h1>
@@ -60,6 +60,17 @@
         <img class="popup__image" src="#" alt="Описание изображения">
         <p class="popup__caption"></p>
         <button class="popup__close-button popup__close-button-large-image" type="button"></button>
+      </div>
+    </div>
+    <div class="popup popup_type_edit-avatar"> <!-- Попап редактирования аватара -->
+      <div class="popup__container">
+        <form class="popup__form popup__form_type_edit-avatar" name="edit-avatar-form">
+          <h2 class="popup__form-title">Обновить аватар</h2>
+          <input id="link" class="popup__form-input-item popup__form-input-item_type_link" type="url" name="link" required>
+          <span id="link-error" class="error"></span>
+          <button class="popup__submit-button" type="submit">Сохранить</button>
+        </form>
+        <button class="popup__close-button popup__close-button-add-card" type="button"></button>
       </div>
     </div>
     <template class="element-template">
