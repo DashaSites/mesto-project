@@ -77,25 +77,20 @@ const submitFormEditAvatar = (event) => {
 const submitFormAddCard = (event) => {
     event.preventDefault();
   
-    const newCard = {};
+    const newCard = {}; // Создаю объект для передачи на сервер двух его свойств
     newCard.name = popupInputTitle.value;
     newCard.link = popupInputLink.value;
-    //newCard.likes; // ТУТ ПЫТАЮСЬ СОХРАНИТЬ МАССИВ ЛАЙКОВ ДЛЯ СЕРВЕРА
 
     buttonSubmitAddCard.textContent = 'Сохранение...';
 
-    createCardOnServer(newCard)
+    createCardOnServer(newCard) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
     .then((res) => {
-        newCard.likes.length = res.likes.length;
-        console.log(res.likes); // ПЫТАЮСЬ ЗАГРУЗИТЬ АКТУАЛЬНЫЙ МАССИВ ЛАЙКОВ С СЕРВЕРА 
-        cardsContainer.prepend(createCard(newCard));
+        cardsContainer.prepend(createCard(res.link, res.name, res.likes, res.owner._id, res._id));
     })
     .catch((err) => console.log(err))
     .finally(() => {
         buttonSubmitAddCard.textContent = 'Создать';
     });
-
-    //cardsContainer.prepend(createCard(newCard)); Это работало до подключения к серверу. Стояло вместо вызова функции createCardOnServer(newCard), которая теперь выше
   
     event.target.reset();
     

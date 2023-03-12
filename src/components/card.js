@@ -21,20 +21,9 @@ const createCard = (link, name, likes, ownerId, _id, currentUserId) => {
 
     const likeButton = cardElement.querySelector('.element__like-button'); // Сердечко данной карточки
     const likeCounterElement = cardElement.querySelector('.element__like-counter'); // Элемент счетчика лайков
-    likeCounterElement.textContent = likes.length; // Записали длину массива лайков данной карточки в счетчик ее лайков в DOM
-
-    // Проверка, сколько лайков у карточки, и если их > 0, отображаем счетчик лайков
-    /*
-    if (likes.length > 0) {
-            likeCounterElement.classList.add('element__like-counter_active');
-            likeCounterElement.textContent = likes.length;
-        } else {
-            likeCounterElement.classList.remove('element__like-counter_active');
-            likeCounterElement.textContent = '';
-        }
-        */
+    likeCounterElement.textContent = likes.length.toString(); // Записали длину массива лайков данной карточки в счетчик ее лайков в DOM
     
-    // Проверяю, есть ли уже мой лайк в массиве лайков карточки. Если да, то сердечко будет уже черное
+    // Проверяю, есть ли уже мой лайк в массиве лайков карточки. Если да, то сердечко сразу при загрузке будет черное
     const isLiked = Boolean(likes.find(user => user._id === currentUserId));
     if (isLiked) {
         likeButton.classList.add('element__like-button_active');
