@@ -1,5 +1,5 @@
 import { handlerImageClick, renderInitialCards } from '../index.js'
-import { deleteCardOnServer, likeCard } from './api.js';
+import { deleteCardOnServer, likeCard, unlikeCard } from './api.js';
 
 // ФУНКЦИИ ДЛЯ РАБОТЫ С КАРТОЧКАМИ
 
@@ -10,7 +10,7 @@ const toggleLike = (event) => {
 
 
 // Создаем карточку
-const createCard = (link, name, likes, ownerId, _id, currentUserId, toggleLike) => {
+const createCard = (link, name, likes, ownerId, _id, currentUserId) => {
     const cardTemplate = document.querySelector('.element-template').content;
     const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
     const cardImage = cardElement.querySelector('.element__image');
@@ -19,34 +19,45 @@ const createCard = (link, name, likes, ownerId, _id, currentUserId, toggleLike) 
     cardImage.alt = name;
     cardElement.querySelector('.element__caption').textContent = name;
 
-    const likeButton = cardElement.querySelector('.element__like-button');
-    const likeCounterElement = cardElement.querySelector('.element__like-counter');
+    const likeButton = cardElement.querySelector('.element__like-button'); // Сердечко данной карточки
+    const likeCounterElement = cardElement.querySelector('.element__like-counter'); // Элемент счетчика лайков
+    likeCounterElement.textContent = likes.length; // Записали длину массива лайков данной карточки в счетчик ее лайков в DOM
 
-
-    // Записываю длину массива лайков карточки в строковый формат, чтобы отобразить ее в карточке 
-    likeCounterElement.textContent = likes.length.toString();
-
-    // Проверяю, есть ли мой лайк в массиве лайков карточки
-    const isLiked = Boolean(likes.find(user => user._id === currentUserId));
+    // Проверка, сколько лайков у карточки, и если их > 0, отображаем счетчик лайков
+    /*
+    if (likes.length > 0) {
+            likeCounterElement.classList.add('element__like-counter_active');
+            likeCounterElement.textContent = likes.length;
+        } else {
+            likeCounterElement.classList.remove('element__like-counter_active');
+            likeCounterElement.textContent = '';
+        }
+        */
     
-    // Функция изменения состояния кнопки лайка (когда я лайкнула или отлайкнула карточку)
+    // Проверяю, есть ли уже мой лайк в массиве лайков карточки. Если да, то сердечко будет уже черное
+    const isLiked = Boolean(likes.find(user => user._id === currentUserId));
+    if (isLiked) {
+        likeButton.classList.add('element__like-button_active');
+    } 
+
     likeButton.addEventListener('click', (event) => {
-        if (!isLiked) { // Проверяю, есть ли мой лайк уже в массиве лайков, и если нет,
-            likeCard(_id) // Вызываю через сервер функцию "лайкнуть"
+        if (event.target.classList.contains('element__like-button_active')) { // Если карточка уже была лайкнута
+            unlikeCard(_id)
             .then((res) => {
-                likeCounterElement.textContent = res.likeCounterElement;
-                likeButton.classList.add('element__like-button_active');
+                event.target.classList.remove('element__like-button_active');
+                likeCounterElement.textContent = res.likes.length;
             })
             .catch((err) => console.log(err));
-        } else { // Если, наоборот, мой лайк уже есть
-            unlikeCard(_id) // То вызываю функцию "отлайкнуть"
+
+        } else { // Если карточка не была лайкнута
+            likeCard(_id) 
             .then((res) => {
-                likeCounterElement.textContent = res.likeCounterElement;
-                likeButton.classList.remove('element__like-button_active');
+                event.target.classList.add('element__like-button_active');
+                likeCounterElement.textContent = res.likes.length;
             })
             .catch((err) => console.log(err));
         }
-    });
+    })
 
     const deleteButton = cardElement.querySelector('.element__delete-button'); // кнопка удаления данной карточки
     const isOwner = ownerId === currentUserId; // проверяем: владелец данной карточки и текущий юзер - это один и тот же юзер?

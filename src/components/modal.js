@@ -80,11 +80,14 @@ const submitFormAddCard = (event) => {
     const newCard = {};
     newCard.name = popupInputTitle.value;
     newCard.link = popupInputLink.value;
+    //newCard.likes; // ТУТ ПЫТАЮСЬ СОХРАНИТЬ МАССИВ ЛАЙКОВ ДЛЯ СЕРВЕРА
 
     buttonSubmitAddCard.textContent = 'Сохранение...';
 
     createCardOnServer(newCard)
-    .then((newCard) => {
+    .then((res) => {
+        newCard.likes.length = res.likes.length;
+        console.log(res.likes); // ПЫТАЮСЬ ЗАГРУЗИТЬ АКТУАЛЬНЫЙ МАССИВ ЛАЙКОВ С СЕРВЕРА 
         cardsContainer.prepend(createCard(newCard));
     })
     .catch((err) => console.log(err))

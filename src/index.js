@@ -128,7 +128,6 @@ const validationConfig = {
 
 let currentUserId; // Запишем в эту переменную id текущего пользователя, чтобы использовать его позже при создании карты 
 
-
 // Выкладываем начальный массив карт и забираем с сервера информацию о пользователе
 const renderInitialCards = (cards) => {
   // Вызываем функцию, которая делает запрос к серверу на получение 
@@ -136,10 +135,11 @@ const renderInitialCards = (cards) => {
   getInitialData()
   .then(([user, cards]) => {
 
-    // Берем с сервера и отрисовываем (выкладываем) начальную информацию о пользователе
-    profileName.textContent = user.name;
-    profileOccupation.textContent = user.about;
+    // Берем с сервера и отрисовываем (выкладываем) начальную информацию о пользователе:
+    profileName.textContent = user.name; // имя
+    profileOccupation.textContent = user.about; // род занятий
     currentUserId = user._id; // определяем id текущего пользователя
+    userAvatar.style.backgroundImage = `url(${user.avatar})`; // аватар текущего пользователя
 
     // Выкладываем начальный массив карточек, берем его с сервера
     cards.forEach((initialCard) => {
