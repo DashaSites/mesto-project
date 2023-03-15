@@ -42,7 +42,6 @@ formAddCard.addEventListener('submit', submitFormAddCard);
 formEditAvatar.addEventListener('submit', submitFormEditAvatar);
 
 
-
 ////////// ОБРАТАТЫВАЕМ ЗАПРОСЫ С СЕРВЕРА!!! //////////
 
 let currentUserId; // Запишем в эту переменную id текущего пользователя, чтобы использовать его позже при создании карты 

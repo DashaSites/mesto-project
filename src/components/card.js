@@ -3,7 +3,6 @@ import { deleteCardOnServer, likeCard, unlikeCard } from './api.js';
 import { openPopup } from './utils.js';
 
 // ФУНКЦИИ ДЛЯ РАБОТЫ С КАРТОЧКАМИ
-
 // Ставим/убираем лайк 
 const toggleLike = (event) => {
     event.target.classList.toggle('element__like-button_active');
