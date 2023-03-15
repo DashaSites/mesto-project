@@ -36,7 +36,10 @@ formEditProfile.addEventListener('submit', submitFormEditProfile);
 
 
 // Слушатель кликов по кнопке "Создать" в попапе добавления новой карточки
-formAddCard.addEventListener('submit', submitFormAddCard);
+formAddCard.addEventListener('submit', function(event) {
+  submitFormAddCard(event);
+  formAddCard.reset();
+});
 
 // Слушатель кликов по кнопке "Сохранить" в попапе редактирования аватара
 formEditAvatar.addEventListener('submit', submitFormEditAvatar);
