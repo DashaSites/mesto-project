@@ -80,7 +80,7 @@ const showInputError = (inputElement, errorElement, inputErrorClass, errorClass)
     // Создадим переменную для кнопки сабмита в форме (в той форме, с которой сейчас работаем):
     //const buttonElement = formElement.querySelector(submitButtonSelector);
   
-    // Если из всех полей данной формы какое-то сейчас невалидно или если все поля формы пустые - то дизейблим кнопку сабмита
+    // Если из всех полей данной формы какое-то сейчас невалидно - то дизейблим кнопку сабмита
     if (hasInvalidInput(inputList)) {
       disableSubmitButton(buttonElement, disabledButtonClass);
     } else {
@@ -101,9 +101,8 @@ const showInputError = (inputElement, errorElement, inputErrorClass, errorClass)
       // Отменяем действие сабмита по умолчанию
       event.preventDefault();
   
-      // Когда произошел сабмит формы, дизейблим кнопку сабмита
-      toggleButtonState(formElement, inputList, submitButtonSelector, disabledButtonClass, buttonElement);
     });
+
   
     // Создадим массив из коллекции всех полей формы, и запишем его в переменную inputList:
     const inputList = Array.from(formElement.querySelectorAll(inputSelector));

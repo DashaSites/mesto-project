@@ -1,5 +1,6 @@
-import { handlerImageClick, renderInitialCards } from '../index.js'
+import { renderInitialCards, imagePopup, popupImage, popupCaption } from './constants.js'
 import { deleteCardOnServer, likeCard, unlikeCard } from './api.js';
+import { openPopup } from './utils.js';
 
 // ФУНКЦИИ ДЛЯ РАБОТЫ С КАРТОЧКАМИ
 
@@ -9,25 +10,50 @@ const toggleLike = (event) => {
 }
 
 
+// Обработчик клика по картинке (чтобы открыть попап-3)
+const handlerImageClick = ({link, name}) => { 
+    openPopup(imagePopup);
+  
+    popupImage.src = link;
+    popupImage.alt = name;
+    popupCaption.textContent = name;
+}
+
+
 // Создаем карточку
 const createCard = (link, name, likes, ownerId, _id, currentUserId) => {
     const cardTemplate = document.querySelector('.element-template').content;
     const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
     const cardImage = cardElement.querySelector('.element__image');
-  
+    const deleteButton = cardElement.querySelector('.element__delete-button'); // Кнопка удаления данной карточки
+    
     cardImage.src = link;
     cardImage.alt = name;
     cardElement.querySelector('.element__caption').textContent = name;
 
     const likeButton = cardElement.querySelector('.element__like-button'); // Сердечко данной карточки
     const likeCounterElement = cardElement.querySelector('.element__like-counter'); // Элемент счетчика лайков
-    likeCounterElement.textContent = likes.length.toString(); // Записали длину массива лайков данной карточки в счетчик ее лайков в DOM
+    likeCounterElement.textContent = likes.length.toString(); // Записала длину массива лайков данной карточки в счетчик ее лайков в DOM
     
     // Проверяю, есть ли уже мой лайк в массиве лайков карточки. Если да, то сердечко сразу при загрузке будет черное
     const isLiked = Boolean(likes.find(user => user._id === currentUserId));
     if (isLiked) {
         likeButton.classList.add('element__like-button_active');
     } 
+    
+    // Проверяю, моя ли это карточка
+    const isOwner = ownerId === currentUserId; 
+    if (!isOwner) { // Если не моя, то кнопки удаления на ней не будет
+        deleteButton.classList.add('element__delete-button_hidden');
+    } else { // А если моя, то на нее навешивается слушатель кликов с колбэком удаления карточки
+        deleteButton.addEventListener('click', (event) => {
+            deleteCardOnServer(_id)
+            .then(() => {
+                event.target.closest('.element').remove();
+            })
+            .catch((err) => console.log(err));
+        });
+    }
 
     likeButton.addEventListener('click', (event) => {
         if (event.target.classList.contains('element__like-button_active')) { // Если карточка уже была лайкнута
@@ -48,19 +74,6 @@ const createCard = (link, name, likes, ownerId, _id, currentUserId) => {
         }
     })
 
-    const deleteButton = cardElement.querySelector('.element__delete-button'); // кнопка удаления данной карточки
-    const isOwner = ownerId === currentUserId; // проверяем: владелец данной карточки и текущий юзер - это один и тот же юзер?
-    deleteButton.classList.add(isOwner ? 'element__delete-button_visible' : 'element__delete-button_hidden'); // если это один и тот же юзер, то показываем кнопку удаления карточки
-
-    // Удаляем карточку по клику на урну, используя запрос к серверу
-    deleteButton.addEventListener('click', (event) => {
-        deleteCardOnServer(_id)
-        .then(() => {
-            event.target.closest('.element').remove();
-        })
-        .catch((err) => console.log(err));
-    });
-
     //cardImage.addEventListener('click', handlerImageClick);
     cardImage.addEventListener('click', () => handlerImageClick({link, name}));
   
@@ -69,4 +82,4 @@ const createCard = (link, name, likes, ownerId, _id, currentUserId) => {
   
   
     
-export { toggleLike, createCard }; 
+export { toggleLike, createCard, handlerImageClick }; 

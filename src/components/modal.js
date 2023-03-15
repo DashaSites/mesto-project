@@ -1,7 +1,8 @@
-import { popupEditProfile, popupAddCard, imagePopup, popupEditAvatar, nameInput, jobInput, profileName, profileOccupation, userAvatar, popupImage, popupCaption, popupInputTitle, popupInputLink, popupEditAvatarLink, cardsContainer, buttonSubmitEditProfile, buttonSubmitEditAvatar, buttonSubmitAddCard } from '../index.js';
+import { popupEditProfile, popupAddCard, imagePopup, popupEditAvatar, nameInput, jobInput, profileName, profileOccupation, userAvatar, popupImage, popupCaption, popupInputTitle, popupInputLink, popupEditAvatarLink, cardsContainer, buttonSubmitEditProfile, buttonSubmitEditAvatar, buttonSubmitAddCard } from './constants.js';
 import { openPopup, closePopup } from './utils.js';
 import { createCard } from './card.js';
 import { updateUserInfo, createCardOnServer, updateAvatar } from './api.js';
+import { currentUserId } from '../index.js';
 
 // ФУНКЦИИ, СВЯЗАННЫЕ С РАБОТОЙ ПОПАПОВ
 
@@ -23,6 +24,7 @@ const handleButtonEditAvatar = () => {
     openPopup(popupEditAvatar);
 }
 
+
 // ЗДЕСЬ ИСПОЛЬЗУЕМ РЕЗУЛЬТАТ ПРОМИСА
 // Обработчик отправки формы редактирования профиля
 const submitFormEditProfile = (event) => {
@@ -32,6 +34,7 @@ const submitFormEditProfile = (event) => {
     user.name = nameInput.value;
     user.about = jobInput.value;
 
+    
     buttonSubmitEditProfile.textContent = 'Сохранение...';
 
     updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
@@ -39,14 +42,12 @@ const submitFormEditProfile = (event) => {
     .then((user) => {
         profileName.textContent = user.name;
         profileOccupation.textContent = user.about;
+        closePopup(popupEditProfile);
     })
     .catch((err) => console.log(err))
     .finally(() => {
-        buttonSubmitEditProfile.textContent = 'Сохранить';
+        renderLoading(false, buttonSubmitEditProfile);
       }); 
-    //profileName.textContent = nameInput.value; // Эта вставка данных работала до подключения к серверу
-    //profileOccupation.textContent = jobInput.value; // Эта вставка данных работала до подключения к серверу
-    closePopup(popupEditProfile);
 }
 
 
@@ -62,13 +63,13 @@ const submitFormEditAvatar = (event) => {
     // В случае положительного ответа с сервера, содержимое этого ответа кладем в нужное место в DOM
     .then((res) => {
         userAvatar.style.backgroundImage = `url(${res.avatar})`;
+        closePopup(popupEditAvatar);
     })
     .catch((err) => console.log(err))
     .finally(() => {
         buttonSubmitEditAvatar.textContent = 'Сохранить';
     });
     //userAvatar.style.backgroundImage = `url(${popupEditAvatarLink.value})`;
-    closePopup(popupEditAvatar);
 }
 
 
@@ -82,23 +83,23 @@ const submitFormAddCard = (event) => {
     newCard.link = popupInputLink.value;
 
     buttonSubmitAddCard.textContent = 'Сохранение...';
+    // Перед вызовом createCard сделать проверку: моя/не моя карточка
 
     createCardOnServer(newCard) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
     .then((res) => {
-        cardsContainer.prepend(createCard(res.link, res.name, res.likes, res.owner._id, res._id));
+        cardsContainer.prepend(createCard(res.link, res.name, res.likes, res.owner._id, res._id, currentUserId));
+        event.target.reset();
+        closePopup(popupAddCard);
     })
     .catch((err) => console.log(err))
     .finally(() => {
         buttonSubmitAddCard.textContent = 'Создать';
     });
-  
-    event.target.reset();
-    
-    closePopup(popupAddCard);
 }
 
 
 // Обработчик клика по картинке (чтобы открыть попап-3)
+/*
 const handlerImageClick = ({link, name}) => { 
     openPopup(imagePopup);
   
@@ -106,6 +107,7 @@ const handlerImageClick = ({link, name}) => {
     popupImage.alt = name;
     popupCaption.textContent = name;
 }
+*/
 
 
 // Функция закрытия любого попапа нажатием на Esc
@@ -117,4 +119,4 @@ const closePopupByEsc = (event) => {
 
 
 
-export { handleButtonEditProfileOpen, handleButtonAddCardOpen, submitFormEditProfile, submitFormEditAvatar, handleButtonEditAvatar, submitFormAddCard, handlerImageClick, closePopupByEsc };
+export { handleButtonEditProfileOpen, handleButtonAddCardOpen, submitFormEditProfile, submitFormEditAvatar, handleButtonEditAvatar, submitFormAddCard, closePopupByEsc };
