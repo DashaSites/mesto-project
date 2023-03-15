@@ -100,8 +100,9 @@ const showInputError = (inputElement, errorElement, inputErrorClass, errorClass)
     formElement.addEventListener('submit', (event) => {
       // Отменяем действие сабмита по умолчанию
       event.preventDefault();
-  
     });
+
+
 
   
     // Создадим массив из коллекции всех полей формы, и запишем его в переменную inputList:

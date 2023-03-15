@@ -46,7 +46,7 @@ const submitFormEditProfile = (event) => {
     })
     .catch((err) => console.log(err))
     .finally(() => {
-        renderLoading(false, buttonSubmitEditProfile);
+        buttonSubmitEditProfile.textContent = 'Сохранить';
       }); 
 }
 
