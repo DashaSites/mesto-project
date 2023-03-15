@@ -95,16 +95,13 @@ const showInputError = (inputElement, errorElement, inputErrorClass, errorClass)
 
     // Сразу как попали в форму, создаем переменную для кнопки сабмита в ней (в той форме, с которой сейчас работаем):
     const buttonElement = formElement.querySelector(submitButtonSelector);
-    
+
     // Слушатель сабмита формы
     formElement.addEventListener('submit', (event) => {
       // Отменяем действие сабмита по умолчанию
       event.preventDefault();
     });
 
-
-
-  
     // Создадим массив из коллекции всех полей формы, и запишем его в переменную inputList:
     const inputList = Array.from(formElement.querySelectorAll(inputSelector));
       

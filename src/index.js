@@ -8,13 +8,13 @@ import { getInitialData, getCurrentUser, getInitialCards } from './components/ap
 
 // ФУНКЦИИ
 
-// Слушатель кликов по кнопке редактирования профиля 
+// Слушатель кликов по кнопке редактирования профиля
 buttonEditProfileOpen.addEventListener('click', handleButtonEditProfileOpen);
 
-// Слушатель кликов по кнопке добавления новой карточки 
+// Слушатель кликов по кнопке добавления новой карточки
 buttonAddCardOpen.addEventListener('click', handleButtonAddCardOpen);
 
-// Слушатель кликов по кнопке, открывающей попап редактирования аватара 
+// Слушатель кликов по кнопке, открывающей попап редактирования аватара
 buttonEditAvatar.addEventListener('click', handleButtonEditAvatar);
 
 
