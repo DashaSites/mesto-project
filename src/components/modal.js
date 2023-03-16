@@ -89,9 +89,6 @@ const submitFormAddCard = (event) => {
     .then((res) => {
         cardsContainer.prepend(createCard(res.link, res.name, res.likes, res.owner._id, res._id, currentUserId));
         event.target.reset();
-        buttonSubmitAddCard.classList.add('popup__submit-button_disabled');
-        buttonSubmitAddCard.setAttribute('disabled', 'true');
-
         closePopup(popupAddCard);
     })
     .catch((err) => console.log(err))
