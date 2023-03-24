@@ -3,7 +3,15 @@ import { enableValidation } from './components/validate.js';
 import { toggleLike, deleteCard, handlerImageClick, createCard } from './components/card.js';
 import { handleButtonEditProfileOpen, handleButtonAddCardOpen, handleButtonEditAvatar, submitFormEditProfile, submitFormEditAvatar, submitFormAddCard, closePopupByEsc } from './components/modal.js';
 import { openPopup, closePopup } from './components/utils.js';
-import { getInitialData, getCurrentUser, getInitialCards } from './components/api.js';
+import Api from './components/Api.js';
+
+const api = new Api({
+  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-20',
+  headers: {
+      authorization: '267cd1fa-32e1-4a1f-90f0-4ec82620b415',
+      'Content-Type': 'application/json'
+  }
+});
 
 
 // ФУНКЦИИ
@@ -51,7 +59,7 @@ let currentUserId; // Запишем в эту переменную id теку�
 const renderInitialCards = (cards) => {
   // Вызываем функцию, которая делает запрос к серверу на получение 
   // начальной информации о пользователе и начального массива карточек
-  getInitialData()
+  api.getInitialData()
   .then(([user, cards]) => {
 
     // Берем с сервера и отрисовываем (выкладываем) начальную информацию о пользователе:
@@ -77,4 +85,4 @@ renderInitialCards();
 // Вызов функции для включения валидации всех форм (передаем ей параметром необходимый объект настроек)
 enableValidation(validationConfig);
 
-export { currentUserId };
+export { currentUserId, api };
