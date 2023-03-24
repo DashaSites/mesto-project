@@ -1,5 +1,5 @@
 export default class Api {
-    constructor(baseUrl, headers) {
+    constructor({baseUrl, headers}) {
         this._baseUrl = baseUrl;
         this._headers = headers;
     }
@@ -34,7 +34,7 @@ export default class Api {
 }
 
     getInitialData = () => {
-    return Promise.all([this.getCurrentUser(), this.getInitialCards()]);
+    return Promise.all([getCurrentUser(), getInitialCards()]);
 }
 
 

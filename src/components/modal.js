@@ -1,7 +1,6 @@
 import { popupEditProfile, popupAddCard, imagePopup, popupEditAvatar, nameInput, jobInput, profileName, profileOccupation, userAvatar, popupImage, popupCaption, popupInputTitle, popupInputLink, popupEditAvatarLink, cardsContainer, buttonSubmitEditProfile, buttonSubmitEditAvatar, buttonSubmitAddCard } from './constants.js';
 import { openPopup, closePopup } from './utils.js';
 import { createCard } from './card.js';
-//import api from './Api.js';
 import { currentUserId, api } from '../index.js';
 
 // ФУНКЦИИ, СВЯЗАННЫЕ С РАБОТОЙ ПОПАПОВ

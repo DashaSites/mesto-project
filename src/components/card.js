@@ -1,5 +1,4 @@
 import { renderInitialCards, imagePopup, popupImage, popupCaption } from './constants.js'
-import { deleteCardOnServer, likeCard, unlikeCard } from './Api.js';
 import { openPopup } from './utils.js';
 import { api } from '../index.js';
 
