@@ -1,115 +1,98 @@
 export default class Api {
-    constructor({baseUrl, headers}) {
-        this._baseUrl = baseUrl;
-        this._headers = headers;
-    }
-
-
-    // Проверяем в универсальной для всех промисов функции, что ответ успешный, и если да, то 
-    // вернем инфу, сконвертированную из JSON-строки в объект. Иначе отменим промис и покажем сообщение об ошибке
-    getResponseData = (res) => {
-        return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
-    }
-
-
-    // Добавим универсальную функцию с проверкой ответа, чтоб не дублировать потом эту проверку в каждом фетче
-    request(url, options) {
-    // Принимает два аргумента: урл и объект опций, как и `fetch`
-    return fetch(url, options).then(getResponseData)
+  constructor({ baseUrl, headers }) {
+    this._baseUrl = baseUrl;
+    this._headers = headers;
   }
 
+  // Проверяем в универсальной для всех промисов функции, что ответ успешный, и если да, то
+  // вернем инфу, сконвертированную из JSON-строки в объект. Иначе отменим промис и покажем сообщение об ошибке
+  getResponseData = (res) => {
+    return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
+  };
+
+  // Добавим универсальную функцию с проверкой ответа, чтоб не дублировать потом эту проверку в каждом фетче
+  request(url, options) {
+    // Принимает два аргумента: урл и объект опций, как и `fetch`
+    return fetch(url, options).then(this.getResponseData);
+  }
 
   // Получаем с сервера начальные данные о пользователе
-    getCurrentUser = () => {
-    return request(`${this._baseUrl}/users/me`, {
-        headers: this._headers
-    })
+  _getCurrentUser = () => {
+    return this.request(`${this._baseUrl}/users/me`, {
+      headers: this._headers,
+    });
+  };
+
+  // Загружаем начальные карточки с сервера
+  getInitialCards = () => {
+    return this.request(`${this._baseUrl}/cards`, {
+      headers: this._headers,
+    });
+  };
+
+  getInitialData = () => {
+    return Promise.all([this._getCurrentUser(), this.getInitialCards()]);
+  };
+
+  // Сохраняем на сервере отредактированные данные профиля - ФОРМА/ПОПАП
+  updateUserInfo = (user) => {
+    return this.request(`${this._baseUrl}/users/me`, {
+      method: "PATCH",
+      headers: this._headers,
+      body: JSON.stringify({
+        name: user.name,
+        about: user.about,
+      }),
+    });
+  };
+
+  // Добавляем на сервер новую карточку (загружаем ее из попапа-2) - ФОРМА/ПОПАП
+  createCardOnServer = (newCard) => {
+    return this.request(`${this._baseUrl}/cards`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        name: newCard.name,
+        link: newCard.link,
+      }),
+    });
+  };
+
+  // Запрос на удаление карточки
+  deleteCardOnServer = (id) => {
+    return this.request(`${this._baseUrl}/cards/${id}`, {
+      method: "DELETE",
+      headers: this._headers,
+    });
+  };
+
+  // Обновление аватара пользователя - ФОРМА/ПОПАП
+  updateAvatar = (link) => {
+    return this.request(`${this._baseUrl}/users/me/avatar`, {
+      method: "PATCH",
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: link,
+      }),
+    });
+  };
+
+  // Поставить лайк карточке
+  likeCard = (id) => {
+    return this.request(`${this._baseUrl}/cards/likes/${id}`, {
+      method: "PUT",
+      headers: this._headers,
+    });
+  };
+
+  // Убрать лайк с карточки
+  unlikeCard = (id) => {
+    return this.request(`${this._baseUrl}/cards/likes/${id}`, {
+      method: "DELETE",
+      headers: this._headers,
+    });
+  };
 }
-
-// Загружаем начальные карточки с сервера
-    getInitialCards = () => {
-    return request(`${this._baseUrl}/cards`, {
-        headers: this._headers
-    })
-}
-
-    getInitialData = () => {
-    return Promise.all([getCurrentUser(), getInitialCards()]);
-}
-
-
-// Сохраняем на сервере отредактированные данные профиля - ФОРМА/ПОПАП
-    updateUserInfo = (user) => {
-    return request(`${this._baseUrl}/users/me`, {
-        method: 'PATCH',
-        headers: this._headers,
-        body: JSON.stringify({
-            name: user.name,
-            about: user.about
-          })
-    })
-}
-
-
-    // Добавляем на сервер новую карточку (загружаем ее из попапа-2) - ФОРМА/ПОПАП
-    createCardOnServer = (newCard) => { 
-    return request(`${this._baseUrl}/cards`, {
-        method: 'POST',
-        headers: this._headers,
-        body: JSON.stringify({
-            name: newCard.name,
-            link: newCard.link
-          })
-    })
-}
-
-
-    // Запрос на удаление карточки
-    deleteCardOnServer = (id) => {
-    return request(`${this._baseUrl}/cards/${id}`, {
-        method: 'DELETE',
-        headers: this._headers
-    })
-}
-
-
-// Обновление аватара пользователя - ФОРМА/ПОПАП
-    updateAvatar = (link) => {
-    return request(`${this._baseUrl}/users/me/avatar`, {
-        method: 'PATCH',
-        headers: this._headers,
-        body: JSON.stringify({
-            avatar: link
-          })
-    })
-}
-
-    // Поставить лайк карточке
-    likeCard = (id) => {
-    return request(`${this._baseUrl}/cards/likes/${id}`, {
-        method: 'PUT',
-        headers: this._headers
-    })
-}
-
-    // Убрать лайк с карточки
-    unlikeCard = (id) => {
-    return request(`${this._baseUrl}/cards/likes/${id}`, {
-        method: 'DELETE',
-        headers: this._headers
-    })
-}
-
-}
-
-
-
-
-
-
-
-
-
 
 /*
 import { nameInput, jobInput } from './constants.js';
@@ -220,7 +203,3 @@ export const unlikeCard = (id) => {
     })
 }
 */
-
-
-
-

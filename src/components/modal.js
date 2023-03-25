@@ -1,7 +1,7 @@
 import { popupEditProfile, popupAddCard, imagePopup, popupEditAvatar, nameInput, jobInput, profileName, profileOccupation, userAvatar, popupImage, popupCaption, popupInputTitle, popupInputLink, popupEditAvatarLink, cardsContainer, buttonSubmitEditProfile, buttonSubmitEditAvatar, buttonSubmitAddCard } from './constants.js';
 import { openPopup, closePopup } from './utils.js';
 import { createCard } from './card.js';
-import { updateUserInfo, createCardOnServer, updateAvatar } from './api.js';
+import { updateUserInfo, createCardOnServer, updateAvatar } from './Api.js';
 import { currentUserId } from '../index.js';
 
 // ФУНКЦИИ, СВЯЗАННЫЕ С РАБОТОЙ ПОПАПОВ
@@ -37,7 +37,7 @@ const submitFormEditProfile = (event) => {
     
     buttonSubmitEditProfile.textContent = 'Сохранение...';
 
-    updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
+    api.updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
     // (мы вставляем эти данные в шапку из попапа)
     .then((user) => {
         profileName.textContent = user.name;
@@ -59,7 +59,7 @@ const submitFormEditAvatar = (event) => {
     buttonSubmitEditAvatar.textContent = 'Сохранение...';
 
     // Получим результат промиса (делаем замену методом PATCH)
-    updateAvatar(popupEditAvatarLink.value)
+    api.updateAvatar(popupEditAvatarLink.value)
     // В случае положительного ответа с сервера, содержимое этого ответа кладем в нужное место в DOM
     .then((res) => {
         userAvatar.style.backgroundImage = `url(${res.avatar})`;
@@ -85,7 +85,7 @@ const submitFormAddCard = (event) => {
     buttonSubmitAddCard.textContent = 'Сохранение...';
     // Перед вызовом createCard сделать проверку: моя/не моя карточка
 
-    createCardOnServer(newCard) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
+    api.createCardOnServer(newCard) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
     .then((res) => {
         cardsContainer.prepend(createCard(res.link, res.name, res.likes, res.owner._id, res._id, currentUserId));
         event.target.reset();

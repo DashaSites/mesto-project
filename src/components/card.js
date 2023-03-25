@@ -1,5 +1,5 @@
 import { renderInitialCards, imagePopup, popupImage, popupCaption } from './constants.js'
-import { deleteCardOnServer, likeCard, unlikeCard } from './api.js';
+import { deleteCardOnServer, likeCard, unlikeCard } from './Api.js';
 import { openPopup } from './utils.js';
 
 // ФУНКЦИИ ДЛЯ РАБОТЫ С КАРТОЧКАМИ
@@ -46,7 +46,7 @@ const createCard = (link, name, likes, ownerId, _id, currentUserId) => {
         deleteButton.classList.add('element__delete-button_hidden');
     } else { // А если моя, то на нее навешивается слушатель кликов с колбэком удаления карточки
         deleteButton.addEventListener('click', (event) => {
-            deleteCardOnServer(_id)
+            api.deleteCardOnServer(_id)
             .then(() => {
                 event.target.closest('.element').remove();
             })
@@ -56,7 +56,7 @@ const createCard = (link, name, likes, ownerId, _id, currentUserId) => {
 
     likeButton.addEventListener('click', (event) => {
         if (event.target.classList.contains('element__like-button_active')) { // Если карточка уже была лайкнута
-            unlikeCard(_id)
+            api.unlikeCard(_id)
             .then((res) => {
                 event.target.classList.remove('element__like-button_active');
                 likeCounterElement.textContent = res.likes.length;
@@ -64,7 +64,7 @@ const createCard = (link, name, likes, ownerId, _id, currentUserId) => {
             .catch((err) => console.log(err));
 
         } else { // Если карточка не была лайкнута
-            likeCard(_id) 
+            api.likeCard(_id) 
             .then((res) => {
                 event.target.classList.add('element__like-button_active');
                 likeCounterElement.textContent = res.likes.length;
