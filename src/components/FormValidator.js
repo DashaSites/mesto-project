@@ -88,9 +88,6 @@ export default class FormValidator {
 
   // Переключатель состояния кнопки сабмита:
   toggleButtonState = (inputList, buttonElement) => {
-  
-    // Создадим переменную для кнопки сабмита в форме (в той форме, с которой сейчас работаем):
-    //const buttonElement = formElement.querySelector(submitButtonSelector);
 
     // Если из всех полей данной формы какое-то сейчас невалидно - то дизейблим кнопку сабмита
     if (this.hasInvalidInput(inputList)) {
