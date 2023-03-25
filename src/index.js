@@ -1,9 +1,11 @@
 import { buttonEditProfileOpen, buttonAddCardOpen, buttonEditAvatar, popupElements, formEditProfile, formAddCard, formEditAvatar, profileName, profileOccupation, userAvatar, initialCards, validationConfig, cardsContainer } from './components/constants.js'
-import { enableValidation } from './components/validate.js';
+//import { enableValidation } from './components/FormValidator.js';
 import { toggleLike, deleteCard, handlerImageClick, createCard } from './components/card.js';
 import { handleButtonEditProfileOpen, handleButtonAddCardOpen, handleButtonEditAvatar, submitFormEditProfile, submitFormEditAvatar, submitFormAddCard, closePopupByEsc } from './components/modal.js';
 import { openPopup, closePopup } from './components/utils.js';
 import Api from './components/Api.js';
+import FormValidator from './components/FormValidator.js';
+import { format } from 'core-js/core/date';
 
 const api = new Api({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-20',
@@ -83,6 +85,8 @@ const renderInitialCards = (cards) => {
 renderInitialCards();
 
 // Вызов функции для включения валидации всех форм (передаем ей параметром необходимый объект настроек)
-enableValidation(validationConfig);
+//enableValidation(validationConfig);
+const formEditProfileValidation = new FormValidator(validationConfig, formEditProfile);
+enableValidation();
 
 export { currentUserId, api };
