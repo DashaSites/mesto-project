@@ -1,6 +1,6 @@
 import { renderInitialCards, imagePopup, popupImage, popupCaption } from './constants.js'
 import { openPopup } from './utils.js';
-import { api } from '../index.js';
+//import { api } from '../index.js';
 
 // ФУНКЦИИ ДЛЯ РАБОТЫ С КАРТОЧКАМИ
 // Ставим/убираем лайк 

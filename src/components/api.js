@@ -15,32 +15,32 @@ export default class Api {
     // Добавим универсальную функцию с проверкой ответа, чтоб не дублировать потом эту проверку в каждом фетче
     request(url, options) {
     // Принимает два аргумента: урл и объект опций, как и `fetch`
-    return fetch(url, options).then(getResponseData)
+    return fetch(url, options).then(this.getResponseData)
   }
 
 
   // Получаем с сервера начальные данные о пользователе
     getCurrentUser = () => {
-    return request(`${this._baseUrl}/users/me`, {
+    return this.request(`${this._baseUrl}/users/me`, {
         headers: this._headers
     })
 }
 
 // Загружаем начальные карточки с сервера
     getInitialCards = () => {
-    return request(`${this._baseUrl}/cards`, {
+    return this.request(`${this._baseUrl}/cards`, {
         headers: this._headers
     })
 }
 
     getInitialData = () => {
-    return Promise.all([getCurrentUser(), getInitialCards()]);
+    return Promise.all([this.getCurrentUser(), this.getInitialCards()]);
 }
 
 
 // Сохраняем на сервере отредактированные данные профиля - ФОРМА/ПОПАП
     updateUserInfo = (user) => {
-    return request(`${this._baseUrl}/users/me`, {
+    return this.request(`${this._baseUrl}/users/me`, {
         method: 'PATCH',
         headers: this._headers,
         body: JSON.stringify({
@@ -53,7 +53,7 @@ export default class Api {
 
     // Добавляем на сервер новую карточку (загружаем ее из попапа-2) - ФОРМА/ПОПАП
     createCardOnServer = (newCard) => { 
-    return request(`${this._baseUrl}/cards`, {
+    return this.request(`${this._baseUrl}/cards`, {
         method: 'POST',
         headers: this._headers,
         body: JSON.stringify({
@@ -66,7 +66,7 @@ export default class Api {
 
     // Запрос на удаление карточки
     deleteCardOnServer = (id) => {
-    return request(`${this._baseUrl}/cards/${id}`, {
+    return this.request(`${this._baseUrl}/cards/${id}`, {
         method: 'DELETE',
         headers: this._headers
     })
@@ -75,7 +75,7 @@ export default class Api {
 
 // Обновление аватара пользователя - ФОРМА/ПОПАП
     updateAvatar = (link) => {
-    return request(`${this._baseUrl}/users/me/avatar`, {
+    return this.request(`${this._baseUrl}/users/me/avatar`, {
         method: 'PATCH',
         headers: this._headers,
         body: JSON.stringify({
@@ -86,7 +86,7 @@ export default class Api {
 
     // Поставить лайк карточке
     likeCard = (id) => {
-    return request(`${this._baseUrl}/cards/likes/${id}`, {
+    return this.request(`${this._baseUrl}/cards/likes/${id}`, {
         method: 'PUT',
         headers: this._headers
     })
@@ -94,7 +94,7 @@ export default class Api {
 
     // Убрать лайк с карточки
     unlikeCard = (id) => {
-    return request(`${this._baseUrl}/cards/likes/${id}`, {
+    return this.request(`${this._baseUrl}/cards/likes/${id}`, {
         method: 'DELETE',
         headers: this._headers
     })
