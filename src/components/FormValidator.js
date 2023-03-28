@@ -1,34 +1,35 @@
 export default class FormValidator {
   constructor(config, formElement) {
-    this.config = config;
-    this.config.formSelector = config.formSelector;
-    this.config.inputSelector = config.inputSelector;
-    this.config.submitButtonSelector = config.submitButtonSelector;
-    this.config.disabledButtonClass = config.disabledButtonClass;
-    this.config.inputErrorClass = config.inputErrorClass;
-    this.config.errorClass = config.errorClass;
+    this.formSelector = config.formSelector;
+    this.inputSelector = config.inputSelector;
+    this.submitButtonSelector = config.submitButtonSelector;
+    this.disabledButtonClass = config.disabledButtonClass;
+    this.inputErrorClass = config.inputErrorClass;
+    this.errorClass = config.errorClass;
 
     this.formElement = formElement;
+    // Вынесла константу inputList из массива всех полей данной формы (раньше она определялась в функции setEventListeners) в конструктор:
+    this.inputList = Array.from(this.formElement.querySelectorAll(this.inputSelector));
   }
 
 
   // Добавим невалидные стили и сообщение об ошибке (если инпут невалиден)
   showInputError = (inputElement, errorElement) => {
     // Добавляем стили ошибки для инпута
-    inputElement.classList.add(this.config.inputErrorClass);
+    inputElement.classList.add(this.inputErrorClass);
     // В спан ошибки кладем сообщение об ошибке
     errorElement.textContent = inputElement.validationMessage;
     // Делаем спан ошибки видимым
-    errorElement.classList.add(this.config.errorClass);
+    errorElement.classList.add(this.errorClass);
   };
 
 
   // Скроем сообщение об ошибке и невалидные стили
   hideInputError = (inputElement, errorElement) => {
     // Убираем стили невалидного инпута
-    inputElement.classList.remove(this.config.inputErrorClass);
+    inputElement.classList.remove(this.inputErrorClass);
     // Делаем спан с ошибкой невидимым
-    errorElement.classList.remove(this.config.errorClass);
+    errorElement.classList.remove(this.errorClass);
     // Вытираем сообщение об ошибке (если оно было)
     errorElement.textContent = '';
   };
@@ -53,17 +54,17 @@ export default class FormValidator {
 
     // Прогонии инпут через условную конструкцию. Если он невалиден, то в специальной функции добавим ему стиль невалидного + покажем сообщение об ошибке
     if (!inputElement.validity.valid) {
-      this.showInputError(inputElement, errorElement, this.config.inputErrorClass, this.config.errorClass);
+      this.showInputError(inputElement, errorElement, this.inputErrorClass, this.errorClass);
       // Если жи инпут валиден, то вызовем другую функцию, где не будет невалидного стиля и сообщения об ошибке
     } else {
-      this.hideInputError(inputElement, errorElement, this.config.inputErrorClass, this.config.errorClass);
+      this.hideInputError(inputElement, errorElement, this.inputErrorClass, this.errorClass);
     }
   };
 
 
   // Проверяем, есть ли в форме хотя бы один невалидный инпут
-  hasInvalidInput = (inputList) => {
-    return inputList.some(inputElement => {
+  hasInvalidInput = () => {
+    return this.inputList.some(inputElement => {
     // Пройдемся методом some по массиву инпутов и проверим, вернется ли хотя бы для одного инпута данной формы значение "невалидно":
     return !inputElement.validity.valid;
     });
@@ -73,7 +74,7 @@ export default class FormValidator {
   // Дизейблим кнопку сабмита:
   disableSubmitButton = (buttonElement) => {
     // Добавляем кнопке класс модификатора, который ее отключает
-    buttonElement.classList.add(this.config.disabledButtonClass);
+    buttonElement.classList.add(this.disabledButtonClass);
     buttonElement.disabled = true;
   };
 
@@ -81,20 +82,20 @@ export default class FormValidator {
   // Активируем кнопку сабмита:
   enableSubmitButton = (buttonElement) => {
     // Удаляем с кнопки класс модификатора, который ее дизейблил
-    buttonElement.classList.remove(this.config.disabledButtonClass);
+    buttonElement.classList.remove(this.disabledButtonClass);
     buttonElement.disabled = false;
   };
 
 
   // Переключатель состояния кнопки сабмита:
-  toggleButtonState = (inputList, buttonElement) => {
+  toggleButtonState = (buttonElement) => {
 
     // Если из всех полей данной формы какое-то сейчас невалидно - то дизейблим кнопку сабмита
-    if (this.hasInvalidInput(inputList)) {
-      this.disableSubmitButton(buttonElement, this.config.disabledButtonClass);
+    if (this.hasInvalidInput(this.inputList)) {
+      this.disableSubmitButton(buttonElement, this.disabledButtonClass);
     } else {
     // В противном случае - активируем кнопку сабмита
-      this.enableSubmitButton(buttonElement, this.config.disabledButtonClass);
+      this.enableSubmitButton(buttonElement, this.disabledButtonClass);
     }
   };
 
@@ -103,15 +104,15 @@ export default class FormValidator {
   setEventListeners = () => {
 
     // Сразу как попали в форму, создаем переменную для кнопки сабмита в ней (в той форме, с которой сейчас работаем):
-    const buttonElement = this.formElement.querySelector(this.config.submitButtonSelector);
+    const buttonElement = this.formElement.querySelector(this.submitButtonSelector);
 
     // Деактивируем кнопку при 1й загрузке сайта
-    this.disableSubmitButton(buttonElement, this.config.disabledButtonClass);
+    this.disableSubmitButton(buttonElement, this.disabledButtonClass);
 
     // Обработчик события reset, которым я в index.js сбрасываю поля формы (formAddCard) при ее сабмите
     // А тут я при событии reset заодно дизейблю кнопку
     this.formElement.addEventListener('reset', () => {
-      this.disableSubmitButton(buttonElement, this.config.disabledButtonClass);
+      this.disableSubmitButton(buttonElement, this.disabledButtonClass);
     });
 
     // Слушатель сабмита формы
@@ -119,21 +120,18 @@ export default class FormValidator {
     // Отменяем действие сабмита по умолчанию
       event.preventDefault();
     });
-
-    // Создадим массив из коллекции всех полей формы, и запишем его в переменную inputList:
-    const inputList = Array.from(this.formElement.querySelectorAll(this.config.inputSelector));
     
     // Переберем массив инпутов методом forEach, и по каждому инпуту пройдемся слушателем события инпута:
-    inputList.forEach(inputElement => {
+    this.inputList.forEach(inputElement => {
       inputElement.addEventListener('input', () => {
       // Для каждого инпута вызовем функцию checkInputValidity (она объявлена выше),
       // и вызовем функцию-переключатель состояния кнопки сабмита формы (объявлена выше)
-        this.checkInputValidity(this.formElement, inputElement, this.config.inputErrorClass, this.config.errorClass);
-        this.toggleButtonState(this.formElement, inputList, this.config.submitButtonSelector, this.config.disabledButtonClass, buttonElement);
+        this.checkInputValidity(this.formElement, inputElement, this.inputErrorClass, this.errorClass);
+        this.toggleButtonState(this.formElement, this.inputList, this.submitButtonSelector, this.disabledButtonClass, buttonElement);
       });
     });
   
-    this.toggleButtonState(this.formElement, inputList, this.config.submitButtonSelector, this.config.disabledButtonClass, buttonElement);
+    this.toggleButtonState(this.formElement, this.inputList, this.submitButtonSelector, this.disabledButtonClass, buttonElement);
   }
 
 
@@ -146,13 +144,13 @@ export default class FormValidator {
     // Применительно к каждой форме вызовем функцию setEventListeners (то есть навесим на каждую форму обработчик событий)
     // Аргументами в нее передадим (прокинем дальше) все селекторы из конфига
     //formList.forEach(formElement => {
-      setEventListeners(
+      this.setEventListeners(
         this.formElement,
-        this.config.inputSelector,
-        this.config.submitButtonSelector,
-        this.config.inputErrorClass,
-        this.config.errorClass,
-        this.config.disabledButtonClass
+        this.inputSelector,
+        this.submitButtonSelector,
+        this.inputErrorClass,
+        this.errorClass,
+        this.disabledButtonClass
       );
     //});
   }

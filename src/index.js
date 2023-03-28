@@ -5,7 +5,6 @@ import { handleButtonEditProfileOpen, handleButtonAddCardOpen, handleButtonEditA
 import { openPopup, closePopup } from './components/utils.js';
 import Api from './components/Api.js';
 import FormValidator from './components/FormValidator.js';
-import { format } from 'core-js/core/date';
 
 const api = new Api({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-20',
@@ -84,9 +83,17 @@ const renderInitialCards = (cards) => {
 // Вызываем функцию выкладывания начального массива
 renderInitialCards();
 
-// Вызов функции для включения валидации всех форм (передаем ей параметром необходимый объект настроек)
+
+// Раньше тут был вызов функции для включения валидации всех форм (передаем ей параметром необходимый объект настроек)
 //enableValidation(validationConfig);
+// А теперь ее надо переписать: сделать какой-то цикл, в котором провалидировать по очереди все формы
 const formEditProfileValidation = new FormValidator(validationConfig, formEditProfile);
-enableValidation();
+formEditProfileValidation.enableValidation();
+
+const formAddCardValidation = new FormValidator(validationConfig, formAddCard);
+formAddCardValidation.enableValidation();
+
+const formEditAvatarValidation = new FormValidator(validationConfig, formEditAvatar);
+formEditAvatarValidation.enableValidation();
 
 export { currentUserId, api };

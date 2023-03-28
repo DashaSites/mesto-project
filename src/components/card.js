@@ -1,8 +1,35 @@
+/*
+export default class Card {
+    constructor(link, name, likes, ownerId, _id, currentUserId, selector, toggleLike, handlerImageClick, deleteCardOnServer) {
+        this.link = link;
+        this.name = name;
+        this.likes = likes;
+        this.ownerId = ownerId;
+        this._id = _id;
+        this.currentUserId = currentUserId;
+        this.selector = selector;
+
+        this.toggleLike = toggleLike;
+        this.handlerImageClick = handlerImageClick;
+        this.deleteCardOnServer = deleteCardOnServer;
+    }
+
+    getCardElement() {
+        const cardTemplate = document.querySelector(this.selector).content;
+        const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
+
+        return cardElement;
+    }
+}
+*/
+
 import { renderInitialCards, imagePopup, popupImage, popupCaption } from './constants.js'
-import { openPopup } from './utils.js';
+import { openPopup } from './utils.js'
+
 //import { api } from '../index.js';
 
 // ФУНКЦИИ ДЛЯ РАБОТЫ С КАРТОЧКАМИ
+
 // Ставим/убираем лайк 
 const toggleLike = (event) => {
     event.target.classList.toggle('element__like-button_active');
@@ -79,6 +106,5 @@ const createCard = (link, name, likes, ownerId, _id, currentUserId) => {
     return cardElement;
 }
   
-  
-    
+      
 export { toggleLike, createCard, handlerImageClick }; 
