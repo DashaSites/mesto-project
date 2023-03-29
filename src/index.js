@@ -1,5 +1,4 @@
 import { buttonEditProfileOpen, buttonAddCardOpen, buttonEditAvatar, popupElements, formEditProfile, formAddCard, formEditAvatar, profileName, profileOccupation, userAvatar, initialCards, validationConfig, cardsContainer } from './components/constants.js'
-//import { enableValidation } from './components/FormValidator.js';
 import { toggleLike, deleteCard, handlerImageClick, createCard } from './components/card.js';
 import { handleButtonEditProfileOpen, handleButtonAddCardOpen, handleButtonEditAvatar, submitFormEditProfile, submitFormEditAvatar, submitFormAddCard, closePopupByEsc } from './components/modal.js';
 import { openPopup, closePopup } from './components/utils.js';
@@ -83,10 +82,20 @@ const renderInitialCards = (cards) => {
 // Вызываем функцию выкладывания начального массива
 renderInitialCards();
 
-
+// ВАЛИДАЦИЯ:
 // Раньше тут был вызов функции для включения валидации всех форм (передаем ей параметром необходимый объект настроек)
 //enableValidation(validationConfig);
-// А теперь ее надо переписать: сделать какой-то цикл, в котором провалидировать по очереди все формы
+
+// А теперь ее надо переписать: сделать какой-то цикл, 
+// в котором провалидировать по очереди все формы. Этот не работает:
+const formList = Array.from(document.querySelectorAll('.popup__form'));
+formList.forEach((form) => {
+  const formValidation = new FormValidator(validationConfig, form);
+  formValidation.enableValidation();
+});
+
+// Вариант вызвать enableValidation() на всех трех формах тоже не сработал
+/*
 const formEditProfileValidation = new FormValidator(validationConfig, formEditProfile);
 formEditProfileValidation.enableValidation();
 
@@ -95,5 +104,6 @@ formAddCardValidation.enableValidation();
 
 const formEditAvatarValidation = new FormValidator(validationConfig, formEditAvatar);
 formEditAvatarValidation.enableValidation();
+*/
 
 export { currentUserId, api };

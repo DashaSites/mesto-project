@@ -1,3 +1,4 @@
+/*
 export default class UserIfno {
     constructor(profileName, profileOccupation, userAvatar, currentUserId) {
         this.profileName = profileName;
@@ -16,3 +17,4 @@ export default class UserIfno {
     }
 
 }
+*/
