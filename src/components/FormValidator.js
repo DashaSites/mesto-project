@@ -126,8 +126,8 @@ export default class FormValidator {
       inputElement.addEventListener('input', () => {
       // Для каждого инпута вызовем функцию checkInputValidity (она объявлена выше),
       // и вызовем функцию-переключатель состояния кнопки сабмита формы (объявлена выше)
-        this._checkInputValidity(this._formElement, inputElement, this._inputErrorClass, this._errorClass);
-        this._toggleButtonState(this._formElement, this._inputList, this._submitButtonSelector, this._disabledButtonClass, buttonElement);
+        this._checkInputValidity(inputElement);
+        this._toggleButtonState(buttonElement);
       });
     });
   
