@@ -1,9 +1,10 @@
 import { buttonEditProfileOpen, buttonAddCardOpen, buttonEditAvatar, popupElements, formEditProfile, formAddCard, formEditAvatar, profileName, profileOccupation, userAvatar, initialCards, validationConfig, cardsContainer } from './components/constants.js'
-import { toggleLike, deleteCard, handlerImageClick, createCard } from './components/card.js';
-import { handleButtonEditProfileOpen, handleButtonAddCardOpen, handleButtonEditAvatar, submitFormEditProfile, submitFormEditAvatar, submitFormAddCard, closePopupByEsc } from './components/modal.js';
+//import { toggleLike, deleteCard, handlerImageClick, createCard } from './components/card.js';
+import { handleButtonEditProfileOpen, handleButtonAddCardOpen, handleButtonEditAvatar, handlerImageClick, submitFormEditProfile, submitFormEditAvatar, submitFormAddCard, closePopupByEsc } from './components/modal.js';
 import { openPopup, closePopup } from './components/utils.js';
 import Api from './components/Api.js';
 import FormValidator from './components/FormValidator.js';
+import Card from './components/Card.js';
 
 const api = new Api({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-20',
@@ -62,16 +63,29 @@ const renderInitialCards = (cards) => {
   api.getInitialData()
   .then(([user, cards]) => {
 
-    // Берем с сервера и отрисовываем (выкладываем) начальную информацию о пользователе:
+    // 1) Берем с сервера и отрисовываем (выкладываем) начальную информацию о пользователе:
     profileName.textContent = user.name; // имя
     profileOccupation.textContent = user.about; // род занятий
     currentUserId = user._id; // определяем id текущего пользователя
     userAvatar.style.backgroundImage = `url(${user.avatar})`; // аватар текущего пользователя
 
-    // Выкладываем начальный массив карточек, берем его с сервера
+    /*
+    ТАК РАБОТАЛО ДО ООП:
+    // 2) Выкладываем начальный массив карточек, берем его с сервера
     cards.forEach((initialCard) => {
        cardsContainer.append(createCard(initialCard.link, initialCard.name, initialCard.likes, initialCard.owner._id, initialCard._id, currentUserId, toggleLike ));
     });
+    */
+
+    
+    // 2) ВЫЗЫВАЕМ ЭКЗЕМПЛЯРЫ КЛАССА CARD ДЛЯ КАЖДОЙ КАРТОЧКИ ИЗ МАССИВА
+    cards.forEach((initialCard) => {
+      //const readyCard = new Card(initialCard.link, initialCard.name, initialCard.likes, initialCard.owner._id, initialCard._id, currentUserId);
+      const readyCard = new Card(initialCard, currentUserId, handlerImageClick);
+      const cardElement = readyCard.getFilledElement();
+      cardsContainer.append(cardElement);
+    });
+  
   })
   .catch(err => console.log(err));
 }
@@ -83,20 +97,6 @@ const renderInitialCards = (cards) => {
 renderInitialCards();
 
 // ВАЛИДАЦИЯ:
-// Раньше тут был вызов функции для включения валидации всех форм (передаем ей параметром необходимый объект настроек)
-//enableValidation(validationConfig);
-
-// А теперь ее надо переписать: сделать какой-то цикл, 
-// в котором провалидировать по очереди все формы. Этот не работает:
-/*
-const formList = Array.from(document.querySelectorAll('.popup__form'));
-formList.forEach((form) => {
-  const formValidation = new FormValidator(validationConfig, form);
-  formValidation.enableValidation();
-});
-*/
-// Вариант вызвать enableValidation() на всех трех формах тоже не сработал
-
 const formEditProfileValidation = new FormValidator(validationConfig, formEditProfile);
 formEditProfileValidation.enableValidation();
 

@@ -1,21 +1,29 @@
-
-
-/*
+import { api } from '../index.js';
 export default class Card {
-    constructor({ cardData, handlerImageClick, toggleLike, deleteCardOnServer }, currentUserId, cardSelector) {
+    constructor(cardData, currentUserId, handlerImageClick, cardSelector) {
         this._link = cardData.link;
         this._name = cardData.name;
         this._likes = cardData.likes;
-        this._ownerId = cardData.ownerId;
-        this._id = cardData._id;
+        this._ownerId = cardData.ownerId; // id владельца карточки
+        this._id = cardData._id; // id карточки
 
-        this._currentUserId = currentUserId;
+        this._currentUserId = currentUserId; // текущий пользователь
+
+        this._handlerImageClick = handlerImageClick; // открытие попапа по клику на картинку
         
         this._cardSelector = cardSelector;
+    }
 
-        this._handlerImageClick = handlerImageClick;
-        this._toggleLike = toggleLike;
-        this._deleteCardOnServer = deleteCardOnServer;
+
+    // Проверяю, лайкала ли я данную карточку 
+    // (есть ли мой id в массиве лайкавших)
+    _isLiked() {
+        return Boolean(this._likes.find(user => user._id === this._currentUserId));
+    }
+
+    // Проверяю, моя ли это карточка
+    _isOwner() {
+        return this._ownerId === this._currentUserId; 
     }
 
     // Создаю DOM-элемент-заготовку для карточки, чтобы его потом наполнить данными, а потом отрендерить в верстке
@@ -29,7 +37,7 @@ export default class Card {
         return cardElement;
     }
 
-    // Возвращаю элемент карточки, наполненный всем содержимым:
+    // Публичный метод, возвращающий готовый (наполненный всем содержимым и работоспособный) элемент карточки:
     getFilledElement() {
         this._element = this._getTemplate();
 
@@ -37,6 +45,24 @@ export default class Card {
         const cardImage = this._element.querySelector('.element__image');
         cardImage.src = this._link;
         cardImage.alt = this._name;
+        this._cardImage = cardImage;
+        this._likeButton = this._element.querySelector('.element__like-button'); // сердечко данной карточки
+        this._likeCounterElement = this._element.querySelector('.element__like-counter'); // элемент счетчика лайков
+        this._deleteButton = this._element.querySelector('.element__delete-button'); // кнопка удаления данной карточки
+
+        // Отобразим в счетчике текущее количество лайков карточки
+        this._likeCounterElement.textContent = this._likes.length; 
+
+        // Отобразим, лайкал ли карточку текущий пользователь
+        if(this._isLiked()) {
+            this._likeButton.classList.add('element__like-button_active');
+        } else {
+            this._likeButton.classList.remove('element__like-button_active');
+        }
+
+        if (!this._isOwner) { // Если карточка не моя, то прячем на ней кнопку удаления
+            this._deleteButton.classList.add('element__delete-button_hidden');
+        } 
 
         // Здесь же вызываю обработчики:
         this._setEventListeners();
@@ -46,19 +72,58 @@ export default class Card {
 
     // Объединяю обработчики кликов по карточке в общей фукнкции
     _setEventListeners() {
-        // 1 - Слушатель кликов по урне и условная конструкция с удалением 
-        // 2 - Слушатель кликов по сердечку -> функция-тогл лайка
-        // 3 - Слушатель клика по картинке -> колбэк handlerImageClick
+        // 1) Удаление карточки
+        if (!this._isOwner) { // Если карточка не моя, то прячем на ней кнопку удаления
+            this._deleteButton.classList.add('element__delete-button_hidden');
+        } else { // А если моя, то на кнопку удаления карточки навешивается слушатель кликов с колбэком для удаления карточки
+            this._deleteButton.addEventListener('click', (event) => {
+                api.deleteCardOnServer(this._id)
+                .then(() => {
+                    event.target.closest('.element').remove();
+                })
+                .catch((err) => console.log(err));
+            });
+        }
+
+        // 2) Слушатель кликов по лайку:
+        this._likeButton.addEventListener('click', (event) => {
+            if (event.target.classList.contains('element__like-button_active')) { // Если карточка уже была лайкнута
+                api.unlikeCard(this._id)
+                .then((res) => { // Дезактивируем дайк
+                    event.target.classList.remove('element__like-button_active');
+                    this._likeCounterElement.textContent = res.likes.length;
+                })
+                .catch((err) => console.log(err));
+    
+            } else { // Если карточка раньше не была лайкнута
+                api.likeCard(this._id) 
+                .then((res) => { // Активируем лайк
+                    event.target.classList.add('element__like-button_active');
+                    this._likeCounterElement.textContent = res.likes.length;
+                })
+                .catch((err) => console.log(err));
+            }
+        })
+
+        // 3 - Слушатель клика по картинке: вызываю колбэк handlerImageClick
+        this._cardImage.addEventListener('click', (event) => {
+            this._handlerImageClick(this._link, this._name);
+        })
     }
 }
 
-*/
 
 
 
 
 
-import { renderInitialCards, imagePopup, popupImage, popupCaption } from './constants.js'
+
+
+
+/*
+ТАК РАБОТАЛО ДО ООП:
+
+import { imagePopup, popupImage, popupCaption } from './constants.js'
 import { openPopup } from './utils.js'
 
 //import { api } from '../index.js';
@@ -96,7 +161,7 @@ const createCard = (link, name, likes, ownerId, _id, currentUserId) => {
     const likeCounterElement = cardElement.querySelector('.element__like-counter'); // Элемент счетчика лайков
     likeCounterElement.textContent = likes.length.toString(); // Записала длину массива лайков данной карточки в счетчик ее лайков в DOM
     
-    // !!! Проверяю, есть ли уже мой лайк в массиве лайков карточки. Если да, то сердечко сразу при загрузке будет черное
+    // Проверяю, есть ли уже мой лайк в массиве лайков карточки. Если да, то сердечко сразу при загрузке будет черное
     const isLiked = Boolean(likes.find(user => user._id === currentUserId));
     if (isLiked) {
         likeButton.classList.add('element__like-button_active');
@@ -104,9 +169,9 @@ const createCard = (link, name, likes, ownerId, _id, currentUserId) => {
     
     // !!! Проверяю, моя ли это карточка
     const isOwner = ownerId === currentUserId; 
-    if (!isOwner) { // Если не моя, то кнопки удаления на ней не будет
+    if (!isOwner) { // Если карточка не моя, то прячем на ней кнопку удаления
         deleteButton.classList.add('element__delete-button_hidden');
-    } else { // А если моя, то на нее навешивается слушатель кликов с колбэком удаления карточки
+    } else { // А если моя, то на кнопку удаления карточки навешивается слушатель кликов с колбэком для удаления карточки
         deleteButton.addEventListener('click', (event) => {
             api.deleteCardOnServer(_id)
             .then(() => {
@@ -115,7 +180,8 @@ const createCard = (link, name, likes, ownerId, _id, currentUserId) => {
             .catch((err) => console.log(err));
         });
     }
-    // !!!
+
+    // !!! Слушатель кликов по сердечку
     likeButton.addEventListener('click', (event) => {
         if (event.target.classList.contains('element__like-button_active')) { // Если карточка уже была лайкнута
             api.unlikeCard(_id)
@@ -135,12 +201,12 @@ const createCard = (link, name, likes, ownerId, _id, currentUserId) => {
         }
     })
     
-    // !!!
+    // !!! Слушатель кликов по картинке для открытия попапа с большой картинкой
     //cardImage.addEventListener('click', handlerImageClick);
     cardImage.addEventListener('click', () => handlerImageClick({link, name}));
   
     return cardElement;
 }
   
-      
-export { toggleLike, createCard, handlerImageClick }; 
+    */  
+//export { handlerImageClick }; 

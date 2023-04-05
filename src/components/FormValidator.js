@@ -131,7 +131,7 @@ export default class FormValidator {
       });
     });
   
-    this._toggleButtonState(this._formElement, this._inputList, this._submitButtonSelector, this._disabledButtonClass, buttonElement);
+    this._toggleButtonState(buttonElement);
   }
 
 
@@ -147,27 +147,6 @@ export default class FormValidator {
       this._disabledButtonClass
     );
   }
-  
-  // РАНЬШЕ ЭТА ФУНКЦИЯ ВЫГЛЯДЕЛА ТАК
-  /*
-  enableValidation = () => {
-    // Найдем все формы на странице и соберем эту коллекцию в массив, сохранив его в переменную formList
-    const formList = Array.from(document.querySelectorAll(this._formSelector));
-    // Пройдем по массиву всех форм методом forEach:
-    // Применительно к каждой форме вызовем функцию setEventListeners (то есть навесим на каждую форму обработчик событий)
-    // Аргументами в нее передадим (прокинем дальше) все селекторы из конфига
-    formList.forEach(formElement => {
-      this.setEventListeners(
-        this.formElement,
-        this.inputSelector,
-        this.submitButtonSelector,
-        this.inputErrorClass,
-        this.errorClass,
-        this.disabledButtonClass
-      );
-    });
-  }
-  */
 }
 
 

@@ -38,7 +38,7 @@ export default class Api {
 }
 
 
-// Сохраняем на сервере отредактированные данные профиля - ФОРМА/ПОПАП
+// Сохраняем на сервере отредактированные данные профиля
     updateUserInfo = (user) => {
     return this.request(`${this._baseUrl}/users/me`, {
         method: 'PATCH',
@@ -51,7 +51,7 @@ export default class Api {
 }
 
 
-    // Добавляем на сервер новую карточку (загружаем ее из попапа-2) - ФОРМА/ПОПАП
+    // Добавляем на сервер новую карточку (загружаем ее из попапа-2)
     createCardOnServer = (newCard) => { 
     return this.request(`${this._baseUrl}/cards`, {
         method: 'POST',
@@ -73,7 +73,7 @@ export default class Api {
 }
 
 
-// Обновление аватара пользователя - ФОРМА/ПОПАП
+// Обновление аватара пользователя
     updateAvatar = (link) => {
     return this.request(`${this._baseUrl}/users/me/avatar`, {
         method: 'PATCH',
@@ -110,8 +110,8 @@ export default class Api {
 
 
 
-
 /*
+
 import { nameInput, jobInput } from './constants.js';
 import { user } from '../index.js';
 

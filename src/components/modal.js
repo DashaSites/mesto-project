@@ -1,7 +1,9 @@
 import { popupEditProfile, popupAddCard, imagePopup, popupEditAvatar, nameInput, jobInput, profileName, profileOccupation, userAvatar, popupImage, popupCaption, popupInputTitle, popupInputLink, popupEditAvatarLink, cardsContainer, buttonSubmitEditProfile, buttonSubmitEditAvatar, buttonSubmitAddCard } from './constants.js';
 import { openPopup, closePopup } from './utils.js';
-import { createCard } from './card.js';
+//import { createCard } from './card.js';
 import { currentUserId, api } from '../index.js';
+import Card from './Card.js';
+
 
 // ФУНКЦИИ, СВЯЗАННЫЕ С РАБОТОЙ ПОПАПОВ
 
@@ -21,6 +23,16 @@ const handleButtonAddCardOpen = () => {
 // Обработчик кликов по кнопке открытия попапа для редактирования аватара
 const handleButtonEditAvatar = () => {
     openPopup(popupEditAvatar);
+}
+
+
+// Обработчик, который по клику по картинке открывает попап с картинкой
+const handlerImageClick = (link, name) => { 
+    openPopup(imagePopup);
+    
+    popupImage.src = link;
+    popupImage.alt = name;
+    popupCaption.textContent = name;
 }
 
 
@@ -86,7 +98,16 @@ const submitFormAddCard = (event) => {
 
     api.createCardOnServer(newCard) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
     .then((res) => {
-        cardsContainer.prepend(createCard(res.link, res.name, res.likes, res.owner._id, res._id, currentUserId));
+        // ТАК РАБОТАЛО ДО ООП:
+        //cardsContainer.prepend(createCard(res.link, res.name, res.likes, res.owner._id, res._id, currentUserId));
+
+        // ТАК НЕ РАБОТАЕТ
+        //const addedCard = new Card(res.link, res.name, res.likes, res.owner._id, res._id, currentUserId);
+        // ТАК ТОЖЕ НЕ РАБОТАЕТ
+        const addedCard = new Card(res, currentUserId, handlerImageClick);
+        const addedCardElement = addedCard.getFilledElement();
+        cardsContainer.prepend(addedCardElement);
+
         event.target.reset();
         closePopup(popupAddCard);
     })
@@ -106,4 +127,4 @@ const closePopupByEsc = (event) => {
 
 
 
-export { handleButtonEditProfileOpen, handleButtonAddCardOpen, submitFormEditProfile, submitFormEditAvatar, handleButtonEditAvatar, submitFormAddCard, closePopupByEsc };
+export { handleButtonEditProfileOpen, handleButtonAddCardOpen, handlerImageClick, submitFormEditProfile, submitFormEditAvatar, handleButtonEditAvatar, submitFormAddCard, closePopupByEsc };

@@ -67,7 +67,7 @@ const initialCards = [
   ];
 
 
-// ВАЛИДАЦИЯ ФОРМ: ЗДЕСЬ ТОЛЬКО ОБЪЕКТ С НАСТРОЙКАМИ И ВЫЗОВ ФУНКЦИИ ENABLEVALIDATION
+
 // Создаем объект конфига, в который собираем все для валидации форм
 const validationConfig = {
     formSelector: '.popup__form', // Форма в попапе

@@ -1,3 +1,5 @@
+// НАПИСАТЬ КЛАСС UserInfo
+
 /*
 export default class UserIfno {
     constructor(profileName, profileOccupation, userAvatar, currentUserId) {
