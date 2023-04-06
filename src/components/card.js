@@ -4,9 +4,8 @@ export default class Card {
         this._link = cardData.link;
         this._name = cardData.name;
         this._likes = cardData.likes;
-        this._ownerId = cardData.ownerId; // id владельца карточки
+        this._ownerId = cardData.owner._id; // id владельца карточки
         this._id = cardData._id; // id карточки
-
         this._currentUserId = currentUserId; // текущий пользователь
 
         this._handlerImageClick = handlerImageClick; // открытие попапа по клику на картинку
@@ -22,7 +21,7 @@ export default class Card {
     }
 
     // Проверяю, моя ли это карточка
-    _isOwner() {
+    _isOwner() { 
         return this._ownerId === this._currentUserId; 
     }
 
@@ -38,7 +37,7 @@ export default class Card {
     }
 
     // Публичный метод, возвращающий готовый (наполненный всем содержимым и работоспособный) элемент карточки:
-    getFilledElement() {
+    generateCard() {
         this._element = this._getTemplate();
 
         this._element.querySelector('.element__caption').textContent = this._name;
@@ -60,9 +59,9 @@ export default class Card {
             this._likeButton.classList.remove('element__like-button_active');
         }
 
-        if (!this._isOwner) { // Если карточка не моя, то прячем на ней кнопку удаления
+        if (!this._isOwner()) { // Если карточка не моя, то прячем на ней кнопку удаления
             this._deleteButton.classList.add('element__delete-button_hidden');
-        } 
+       }
 
         // Здесь же вызываю обработчики:
         this._setEventListeners();
@@ -72,8 +71,9 @@ export default class Card {
 
     // Объединяю обработчики кликов по карточке в общей фукнкции
     _setEventListeners() {
+        
         // 1) Удаление карточки
-        if (!this._isOwner) { // Если карточка не моя, то прячем на ней кнопку удаления
+        if (!this._isOwner()) { // Если карточка не моя, то прячем на ней кнопку удаления
             this._deleteButton.classList.add('element__delete-button_hidden');
         } else { // А если моя, то на кнопку удаления карточки навешивается слушатель кликов с колбэком для удаления карточки
             this._deleteButton.addEventListener('click', (event) => {
@@ -83,7 +83,7 @@ export default class Card {
                 })
                 .catch((err) => console.log(err));
             });
-        }
+        } 
 
         // 2) Слушатель кликов по лайку:
         this._likeButton.addEventListener('click', (event) => {
@@ -105,12 +105,20 @@ export default class Card {
             }
         })
 
-        // 3 - Слушатель клика по картинке: вызываю колбэк handlerImageClick
+        // 3 - Слушатель клика по картинке c колбэком handlerImageClick
         this._cardImage.addEventListener('click', (event) => {
             this._handlerImageClick(this._link, this._name);
         })
     }
 }
+
+
+
+
+
+
+
+
 
 
 

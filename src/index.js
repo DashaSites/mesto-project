@@ -1,10 +1,12 @@
 import { buttonEditProfileOpen, buttonAddCardOpen, buttonEditAvatar, popupElements, formEditProfile, formAddCard, formEditAvatar, profileName, profileOccupation, userAvatar, initialCards, validationConfig, cardsContainer } from './components/constants.js'
-//import { toggleLike, deleteCard, handlerImageClick, createCard } from './components/card.js';
 import { handleButtonEditProfileOpen, handleButtonAddCardOpen, handleButtonEditAvatar, handlerImageClick, submitFormEditProfile, submitFormEditAvatar, submitFormAddCard, closePopupByEsc } from './components/modal.js';
 import { openPopup, closePopup } from './components/utils.js';
 import Api from './components/Api.js';
 import FormValidator from './components/FormValidator.js';
 import Card from './components/Card.js';
+import Section from './components/Section.js';
+//import Popup from './components/Popup.js';
+//import PopupWithImage from './components/PopupWithImage.js';
 
 const api = new Api({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-20',
@@ -14,8 +16,6 @@ const api = new Api({
   }
 });
 
-
-// ФУНКЦИИ
 
 // Слушатель кликов по кнопке редактирования профиля
 buttonEditProfileOpen.addEventListener('click', handleButtonEditProfileOpen);
@@ -27,7 +27,9 @@ buttonAddCardOpen.addEventListener('click', handleButtonAddCardOpen);
 buttonEditAvatar.addEventListener('click', handleButtonEditAvatar);
 
 
-// Обработчики одновременно оверлея и крестиков всех попапов. Используя универсальные классы этих элементов, пробегаемся по ним всем, навешиваем обработчики и закрываем тот попап, на который нажали 
+// Обработчики одновременно оверлея и крестиков всех попапов:
+// Используя универсальные классы этих элементов, пробегаемся по ним всем, 
+// навешиваем обработчики и закрываем тот попап, на который нажали 
 popupElements.forEach((popup) => {
   popup.addEventListener('mousedown', (event) => {
     if (event.target.classList.contains('popup_opened')) {
@@ -69,6 +71,9 @@ const renderInitialCards = (cards) => {
     currentUserId = user._id; // определяем id текущего пользователя
     userAvatar.style.backgroundImage = `url(${user.avatar})`; // аватар текущего пользователя
 
+
+    // 2) ВЫЗЫВАЕМ ЭКЗЕМПЛЯРЫ КЛАССА CARD ДЛЯ КАЖДОЙ КАРТОЧКИ ИЗ МАССИВА
+
     /*
     ТАК РАБОТАЛО ДО ООП:
     // 2) Выкладываем начальный массив карточек, берем его с сервера
@@ -76,16 +81,26 @@ const renderInitialCards = (cards) => {
        cardsContainer.append(createCard(initialCard.link, initialCard.name, initialCard.likes, initialCard.owner._id, initialCard._id, currentUserId, toggleLike ));
     });
     */
-
     
-    // 2) ВЫЗЫВАЕМ ЭКЗЕМПЛЯРЫ КЛАССА CARD ДЛЯ КАЖДОЙ КАРТОЧКИ ИЗ МАССИВА
+    /*
+    // ТАК РАБОТАЛО С ООП, НО ДО СОЗДАНИЯ КЛАССА SECTION:
     cards.forEach((initialCard) => {
       //const readyCard = new Card(initialCard.link, initialCard.name, initialCard.likes, initialCard.owner._id, initialCard._id, currentUserId);
       const readyCard = new Card(initialCard, currentUserId, handlerImageClick);
-      const cardElement = readyCard.getFilledElement();
+      const cardElement = readyCard.generateCard();
       cardsContainer.append(cardElement);
     });
-  
+    */
+
+    const cardSection = new Section(
+      (cardFromArray) => {
+        const card = new Card(cardFromArray, currentUserId, handlerImageClick);
+        const cardElement = card.generateCard();
+        return cardElement;
+      },
+    '.elements'
+  )
+    cardSection.renderItems(cards);
   })
   .catch(err => console.log(err));
 }

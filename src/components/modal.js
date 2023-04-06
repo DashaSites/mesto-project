@@ -1,8 +1,8 @@
 import { popupEditProfile, popupAddCard, imagePopup, popupEditAvatar, nameInput, jobInput, profileName, profileOccupation, userAvatar, popupImage, popupCaption, popupInputTitle, popupInputLink, popupEditAvatarLink, cardsContainer, buttonSubmitEditProfile, buttonSubmitEditAvatar, buttonSubmitAddCard } from './constants.js';
 import { openPopup, closePopup } from './utils.js';
-//import { createCard } from './card.js';
 import { currentUserId, api } from '../index.js';
 import Card from './Card.js';
+import Section from './Section.js';
 
 
 // ФУНКЦИИ, СВЯЗАННЫЕ С РАБОТОЙ ПОПАПОВ
@@ -28,6 +28,10 @@ const handleButtonEditAvatar = () => {
 
 // Обработчик, который по клику по картинке открывает попап с картинкой
 const handlerImageClick = (link, name) => { 
+    // Вместо вот этого кода ниже — вызвать экземпляр класса PopupWithImage
+    //const popupWithImage = new class PopupWithImage(imagePopup, link, name);
+    //popupWithImage.open();
+
     openPopup(imagePopup);
     
     popupImage.src = link;
@@ -98,16 +102,21 @@ const submitFormAddCard = (event) => {
 
     api.createCardOnServer(newCard) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
     .then((res) => {
-        // ТАК РАБОТАЛО ДО ООП:
-        //cardsContainer.prepend(createCard(res.link, res.name, res.likes, res.owner._id, res._id, currentUserId));
-
-        // ТАК НЕ РАБОТАЕТ
-        //const addedCard = new Card(res.link, res.name, res.likes, res.owner._id, res._id, currentUserId);
-        // ТАК ТОЖЕ НЕ РАБОТАЕТ
+        const popupCardSection = new Section(
+            (cardFromPopup) => {
+              const card = new Card(cardFromPopup, currentUserId, handlerImageClick);
+              const cardElement = card.generateCard();
+              return cardElement;
+            },
+          '.elements'
+        )
+        popupCardSection.renderItems([res]);
+/*
+// ТАК РАБОТАЛО ДО ООП:
         const addedCard = new Card(res, currentUserId, handlerImageClick);
-        const addedCardElement = addedCard.getFilledElement();
-        cardsContainer.prepend(addedCardElement);
-
+        const addedCardElement = addedCard.generateCard();
+        cardsContainer.prepend(addedCardElement); // добавляю в DOM
+*/
         event.target.reset();
         closePopup(popupAddCard);
     })
