@@ -1,4 +1,4 @@
-import { popupEditProfile, popupAddCard, imagePopup, popupEditAvatar, profileName, profileOccupation, userAvatar, popupImage, popupCaption, popupInputTitle, popupInputLink, popupEditAvatarLink, cardsContainer, buttonSubmitEditProfile, buttonSubmitEditAvatar, buttonSubmitAddCard } from './constants.js';
+import { popupEditProfile, popupAddCard, imagePopup, popupEditAvatar, profileName, profileOccupation, userAvatar, popupImage, popupCaption, popupEditAvatarLink, cardsContainer, buttonSubmitEditProfile, buttonSubmitEditAvatar, buttonSubmitAddCard } from './constants.js';
 import { openPopup, closePopup } from './utils.js';
 import { currentUserId, api, handlerImageClick } from '../index.js';
 import Card from './Card.js';
@@ -14,12 +14,14 @@ const handleButtonEditProfileOpen = () => {
     nameInput.value = profileName.textContent;
     jobInput.value = profileOccupation.textContent; 
 }
-*/
+
 
 // Обработчик кликов по кнопке добавления новой карточки
 const handleButtonAddCardOpen = () => {
     openPopup(popupAddCard);
 }
+*/
+
 
 // Обработчик кликов по кнопке открытия попапа для редактирования аватара
 const handleButtonEditAvatar = () => {
@@ -93,6 +95,7 @@ const submitFormEditAvatar = (event) => {
 }
 
 
+/*
 // 3) ЗДЕСЬ ИСПОЛЬЗУЕМ РЕЗУЛЬТАТ ПРОМИСА
 // Обработчик сабмита формы с новой карточкой
 const submitFormAddCard = (event) => {
@@ -117,12 +120,12 @@ const submitFormAddCard = (event) => {
         )
         popupCardSection.renderItems([res]);
 
-/*
+
 // ТАК КУСОК ВЫШЕ РАБОТАЛ ДО ООП:
-        const addedCard = new Card(res, currentUserId, handlerImageClick);
-        const addedCardElement = addedCard.generateCard();
-        cardsContainer.prepend(addedCardElement); // добавляю в DOM
-*/
+//        const addedCard = new Card(res, currentUserId, handlerImageClick);
+//        const addedCardElement = addedCard.generateCard();
+//        cardsContainer.prepend(addedCardElement); // добавляю в DOM
+
 
         event.target.reset();
         closePopup(popupAddCard);
@@ -132,15 +135,17 @@ const submitFormAddCard = (event) => {
         buttonSubmitAddCard.textContent = 'Создать';
     });
 }
+*/
 
 
 // Функция закрытия любого попапа нажатием на Esc
+/*
 const closePopupByEsc = (event) => {
     if (event.key === 'Escape') {
       closePopup(document.querySelector('.popup_opened'));
     }
 }
+*/
 
 
-
-export { handleButtonAddCardOpen, submitFormEditAvatar, handleButtonEditAvatar, submitFormAddCard, closePopupByEsc };
+export { submitFormEditAvatar, handleButtonEditAvatar };

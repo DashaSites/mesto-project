@@ -1,5 +1,5 @@
-import { buttonEditProfileOpen, buttonAddCardOpen, buttonEditAvatar, popupElements, formEditProfile, formAddCard, formEditAvatar, profileName, profileOccupation, userAvatar, initialCards, validationConfig, nameInput, jobInput, imagePopup, cardsContainer } from './components/constants.js'
-import { handleButtonAddCardOpen, handleButtonEditAvatar, submitFormEditAvatar, submitFormAddCard, closePopupByEsc } from './components/modal.js';
+import { buttonEditProfileOpen, buttonAddCardOpen, buttonEditAvatar, popupElements, formEditProfile, formAddCard, formEditAvatar, profileName, profileOccupation, userAvatar, initialCards, validationConfig, nameInput, jobInput, imagePopup, cardsContainer, popupInputTitle, popupInputLink } from './components/constants.js'
+import { handleButtonEditAvatar, submitFormEditAvatar } from './components/modal.js';
 //import { openPopup, closePopup } from './components/utils.js';
 import Api from './components/Api.js';
 import FormValidator from './components/FormValidator.js';
@@ -17,12 +17,14 @@ const api = new Api({
   }
 });
 
+///// РАБОТА С ПОПАПАМИ /////
 
 // Слушатель кликов по кнопке редактирования профиля
 buttonEditProfileOpen.addEventListener('click', () => {
   handleButtonEditProfileOpen();
 });
 
+// Открываем попап редактирования профиля
 const handleButtonEditProfileOpen = () => {
   const popupToEditProfile = new PopupWithForm('.popup_type_edit-profile', submitFormEditProfile); 
   popupToEditProfile.open();
@@ -35,36 +37,66 @@ const handleButtonEditProfileOpen = () => {
 // 1) ЗДЕСЬ ИСПОЛЬЗУЕМ РЕЗУЛЬТАТ ПРОМИСА
 // Обработчик отправки формы редактирования профиля
 const submitFormEditProfile = (event) => {
-  //event.preventDefault();
 
   const user = {};
   user.name = nameInput.value;
   user.about = jobInput.value;
-
-  
-  //buttonSubmitEditProfile.textContent = 'Сохранение...';
 
   api.updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
   // (мы вставляем эти данные в шапку из попапа)
   .then((user) => {
       profileName.textContent = user.name;
       profileOccupation.textContent = user.about;
-      //closePopup(popupEditProfile);
-
   })
-  .catch((err) => console.log(err))
-  .finally(() => {
-      //buttonSubmitEditProfile.textContent = 'Сохранить';
-    }); 
+  .catch((err) => console.log(err));
+}
+
+
+// Слушатель кликов по кнопке добавления новой карточки
+buttonAddCardOpen.addEventListener('click', () => {
+  handleButtonAddCardOpen();
+});
+
+const handleButtonAddCardOpen = () => {
+  const popupToAddCard = new PopupWithForm('.popup_type_add-card', submitFormAddCard);
+  popupToAddCard.open();
+  popupToAddCard.setEventListeners();
+}
+
+// 3) ЗДЕСЬ ИСПОЛЬЗУЕМ РЕЗУЛЬТАТ ПРОМИСА
+// Обработчик сабмита формы с новой карточкой
+const submitFormAddCard = (event) => {
+  // ГДЕ-ТО ЗДЕСЬ ПРОБЛЕМА, ИЗ-ЗА КОТОРОЙ ГРУЗЯТСЯ СРАЗУ 2 КАРТОЧКИ
+  const newCard = {}; // Создаю объект для передачи на сервер двух его свойств
+  newCard.name = popupInputTitle.value;
+  newCard.link = popupInputLink.value;
+
+  api.createCardOnServer(newCard) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
+  .then((res) => {
+      const popupCardSection = new Section(
+          (cardFromPopup) => {
+            const card = new Card(cardFromPopup, currentUserId, handlerImageClick);
+            const cardElement = card.generateCard();
+            return cardElement;
+          },
+        '.elements'
+      )
+      popupCardSection.renderItems([res]);
+
+/*
+// ТАК КУСОК ВЫШЕ РАБОТАЛ ДО ООП:
+      const addedCard = new Card(res, currentUserId, handlerImageClick);
+      const addedCardElement = addedCard.generateCard();
+      cardsContainer.prepend(addedCardElement); // добавляю в DOM
+*/
+  })
+  .catch((err) => console.log(err));
 }
 
 
 
 
 
-
-// Слушатель кликов по кнопке добавления новой карточки
-buttonAddCardOpen.addEventListener('click', handleButtonAddCardOpen);
 
 // Слушатель кликов по кнопке, открывающей попап редактирования аватара
 buttonEditAvatar.addEventListener('click', handleButtonEditAvatar);
