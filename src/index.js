@@ -1,12 +1,13 @@
-import { buttonEditProfileOpen, buttonAddCardOpen, buttonEditAvatar, popupElements, formEditProfile, formAddCard, formEditAvatar, profileName, profileOccupation, userAvatar, initialCards, validationConfig, cardsContainer } from './components/constants.js'
-import { handleButtonEditProfileOpen, handleButtonAddCardOpen, handleButtonEditAvatar, handlerImageClick, submitFormEditProfile, submitFormEditAvatar, submitFormAddCard, closePopupByEsc } from './components/modal.js';
-import { openPopup, closePopup } from './components/utils.js';
+import { buttonEditProfileOpen, buttonAddCardOpen, buttonEditAvatar, popupElements, formEditProfile, formAddCard, formEditAvatar, profileName, profileOccupation, userAvatar, initialCards, validationConfig, nameInput, jobInput, imagePopup, cardsContainer } from './components/constants.js'
+import { handleButtonAddCardOpen, handleButtonEditAvatar, submitFormEditAvatar, submitFormAddCard, closePopupByEsc } from './components/modal.js';
+//import { openPopup, closePopup } from './components/utils.js';
 import Api from './components/Api.js';
 import FormValidator from './components/FormValidator.js';
 import Card from './components/Card.js';
 import Section from './components/Section.js';
-//import Popup from './components/Popup.js';
-//import PopupWithImage from './components/PopupWithImage.js';
+import Popup from './components/Popup.js';
+import PopupWithImage from './components/PopupWithImage.js';
+import PopupWithForm from './components/PopupWithForm.js';
 
 const api = new Api({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-20',
@@ -18,7 +19,49 @@ const api = new Api({
 
 
 // Слушатель кликов по кнопке редактирования профиля
-buttonEditProfileOpen.addEventListener('click', handleButtonEditProfileOpen);
+buttonEditProfileOpen.addEventListener('click', () => {
+  handleButtonEditProfileOpen();
+});
+
+const handleButtonEditProfileOpen = () => {
+  const popupToEditProfile = new PopupWithForm('.popup_type_edit-profile', submitFormEditProfile); 
+  popupToEditProfile.open();
+  popupToEditProfile.setEventListeners();
+
+  nameInput.value = profileName.textContent;
+  jobInput.value = profileOccupation.textContent; 
+}
+
+// 1) ЗДЕСЬ ИСПОЛЬЗУЕМ РЕЗУЛЬТАТ ПРОМИСА
+// Обработчик отправки формы редактирования профиля
+const submitFormEditProfile = (event) => {
+  //event.preventDefault();
+
+  const user = {};
+  user.name = nameInput.value;
+  user.about = jobInput.value;
+
+  
+  //buttonSubmitEditProfile.textContent = 'Сохранение...';
+
+  api.updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
+  // (мы вставляем эти данные в шапку из попапа)
+  .then((user) => {
+      profileName.textContent = user.name;
+      profileOccupation.textContent = user.about;
+      //closePopup(popupEditProfile);
+
+  })
+  .catch((err) => console.log(err))
+  .finally(() => {
+      //buttonSubmitEditProfile.textContent = 'Сохранить';
+    }); 
+}
+
+
+
+
+
 
 // Слушатель кликов по кнопке добавления новой карточки
 buttonAddCardOpen.addEventListener('click', handleButtonAddCardOpen);
@@ -30,6 +73,7 @@ buttonEditAvatar.addEventListener('click', handleButtonEditAvatar);
 // Обработчики одновременно оверлея и крестиков всех попапов:
 // Используя универсальные классы этих элементов, пробегаемся по ним всем, 
 // навешиваем обработчики и закрываем тот попап, на который нажали 
+/*
 popupElements.forEach((popup) => {
   popup.addEventListener('mousedown', (event) => {
     if (event.target.classList.contains('popup_opened')) {
@@ -40,10 +84,10 @@ popupElements.forEach((popup) => {
     }
   })
 })
-
+*/
 
 // Слушатель кликов по кнопке "Сохранить" в попапе редактирования профиля
-formEditProfile.addEventListener('submit', submitFormEditProfile);
+//formEditProfile.addEventListener('submit', submitFormEditProfile);
 
 
 // Слушатель кликов по кнопке "Создать" в попапе добавления новой карточки
@@ -82,16 +126,6 @@ const renderInitialCards = (cards) => {
     });
     */
     
-    /*
-    // ТАК РАБОТАЛО С ООП, НО ДО СОЗДАНИЯ КЛАССА SECTION:
-    cards.forEach((initialCard) => {
-      //const readyCard = new Card(initialCard.link, initialCard.name, initialCard.likes, initialCard.owner._id, initialCard._id, currentUserId);
-      const readyCard = new Card(initialCard, currentUserId, handlerImageClick);
-      const cardElement = readyCard.generateCard();
-      cardsContainer.append(cardElement);
-    });
-    */
-
     const cardSection = new Section(
       (cardFromArray) => {
         const card = new Card(cardFromArray, currentUserId, handlerImageClick);
@@ -111,6 +145,17 @@ const renderInitialCards = (cards) => {
 // Вызываем функцию выкладывания начального массива
 renderInitialCards();
 
+
+// Обработчик, который по клику по картинке открывает попап с картинкой
+const handlerImageClick = (link, name) => { 
+  // Вместо вот этого кода ниже — вызвать экземпляр класса PopupWithImage
+  const popupWithImage = new PopupWithImage('.popup_type_large-image', link, name);
+  popupWithImage.open();
+  popupWithImage.setEventListeners();
+}
+
+
+
 // ВАЛИДАЦИЯ:
 const formEditProfileValidation = new FormValidator(validationConfig, formEditProfile);
 formEditProfileValidation.enableValidation();
@@ -122,4 +167,4 @@ const formEditAvatarValidation = new FormValidator(validationConfig, formEditAva
 formEditAvatarValidation.enableValidation();
 
 
-export { currentUserId, api };
+export { currentUserId, api, handlerImageClick };

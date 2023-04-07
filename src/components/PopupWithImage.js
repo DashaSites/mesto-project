@@ -1,3 +1,4 @@
+import Popup from './Popup.js';
 export default class PopupWithImage extends Popup {
     constructor(popupSelector, link, name) {
         super(popupSelector); // Вызываю конструктор попапа-родителя
