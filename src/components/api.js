@@ -4,7 +4,6 @@ export default class Api {
         this._headers = headers;
     }
 
-
     // Проверяем в универсальной для всех промисов функции, что ответ успешный, и если да, то 
     // вернем инфу, сконвертированную из JSON-строки в объект. Иначе отменим промис и покажем сообщение об ошибке
     getResponseData = (res) => {
@@ -15,91 +14,90 @@ export default class Api {
     // Добавим универсальную функцию с проверкой ответа, чтоб не дублировать потом эту проверку в каждом фетче
     request(url, options) {
     // Принимает два аргумента: урл и объект опций, как и `fetch`
-    return fetch(url, options).then(this.getResponseData)
-  }
+        return fetch(url, options).then(this.getResponseData)
+    }
 
 
   // Получаем с сервера начальные данные о пользователе
     getCurrentUser = () => {
-    return this.request(`${this._baseUrl}/users/me`, {
+        return this.request(`${this._baseUrl}/users/me`, {
         headers: this._headers
-    })
-}
+      })
+    }
 
 // Загружаем начальные карточки с сервера
     getInitialCards = () => {
-    return this.request(`${this._baseUrl}/cards`, {
+        return this.request(`${this._baseUrl}/cards`, {
         headers: this._headers
-    })
-}
+      })
+    }
 
     getInitialData = () => {
-    return Promise.all([this.getCurrentUser(), this.getInitialCards()]);
-}
+        return Promise.all([this.getCurrentUser(), this.getInitialCards()]);
+    }
 
 
 // Сохраняем на сервере отредактированные данные профиля
     updateUserInfo = (user) => {
-    return this.request(`${this._baseUrl}/users/me`, {
-        method: 'PATCH',
-        headers: this._headers,
-        body: JSON.stringify({
-            name: user.name,
-            about: user.about
+        return this.request(`${this._baseUrl}/users/me`, {
+            method: 'PATCH',
+            headers: this._headers,
+            body: JSON.stringify({
+                name: user.name,
+                about: user.about
           })
-    })
-}
+        })
+    }
 
 
     // Добавляем на сервер новую карточку (загружаем ее из попапа-2)
     createCardOnServer = (newCard) => { 
-    return this.request(`${this._baseUrl}/cards`, {
-        method: 'POST',
-        headers: this._headers,
-        body: JSON.stringify({
-            name: newCard.name,
-            link: newCard.link
-          })
-    })
-}
+        return this.request(`${this._baseUrl}/cards`, {
+            method: 'POST',
+            headers: this._headers,
+            body: JSON.stringify({
+                name: newCard.name,
+                link: newCard.link
+            })
+        })
+    }
 
 
     // Запрос на удаление карточки
     deleteCardOnServer = (id) => {
-    return this.request(`${this._baseUrl}/cards/${id}`, {
-        method: 'DELETE',
-        headers: this._headers
-    })
-}
+        return this.request(`${this._baseUrl}/cards/${id}`, {
+            method: 'DELETE',
+            headers: this._headers
+        })
+    }
 
 
 // Обновление аватара пользователя
     updateAvatar = (link) => {
-    return this.request(`${this._baseUrl}/users/me/avatar`, {
-        method: 'PATCH',
-        headers: this._headers,
-        body: JSON.stringify({
-            avatar: link
-          })
-    })
-}
+        return this.request(`${this._baseUrl}/users/me/avatar`, {
+            method: 'PATCH',
+            headers: this._headers,
+            body: JSON.stringify({
+                avatar: link
+            })
+        })
+    }
 
     // Поставить лайк карточке
     likeCard = (id) => {
-    return this.request(`${this._baseUrl}/cards/likes/${id}`, {
-        method: 'PUT',
-        headers: this._headers
-    })
-}
+        return this.request(`${this._baseUrl}/cards/likes/${id}`, {
+            method: 'PUT',
+            headers: this._headers
+        })
+    }
 
     // Убрать лайк с карточки
     unlikeCard = (id) => {
-    return this.request(`${this._baseUrl}/cards/likes/${id}`, {
-        method: 'DELETE',
-        headers: this._headers
-    })
-}
-
+        return this.request(`${this._baseUrl}/cards/likes/${id}`, {
+            method: 'DELETE',
+            headers: this._headers
+        })
+    }
 }
 
 
@@ -111,6 +109,7 @@ export default class Api {
 
 
 /*
+ТАК РАБОТАЛО ДО ООП:
 
 import { nameInput, jobInput } from './constants.js';
 import { user } from '../index.js';

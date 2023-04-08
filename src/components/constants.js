@@ -7,9 +7,6 @@ const popupEditProfile = document.querySelector('.popup_type_edit-profile'); // 
 const popupAddCard = document.querySelector('.popup_type_add-card'); // Попап добавления новой карточки
 const imagePopup = document.querySelector('.popup_type_large-image'); // Попап-3
 const popupEditAvatar = document.querySelector('.popup_type_edit-avatar'); // Попап редактирования аватара
-const buttonEditProfileClose = document.querySelector('.popup__close-button-edit-profile'); // Кнопка, закрывающая попап редактирования профиля
-const buttonAddCardClose = document.querySelector('.popup__close-button-add-card'); // Кнопка, закрывающая попап добавления карточки
-const buttonLargeImageClose = document.querySelector('.popup__close-button-large-image'); // Кнопка, закрывающая попап с большой картинкой
 const buttonSubmitEditProfile = popupEditProfile.querySelector('.popup__submit-button'); // Кнопка сабмита в попапе редактирования профиля
 const buttonSubmitEditAvatar = popupEditAvatar.querySelector('.popup__submit-button'); // Кнопка сабмита в попапе редактирования аватара
 const buttonSubmitAddCard = popupAddCard.querySelector('.popup__submit-button'); // Кнопка сабмита в попапе добавления новой карточки
@@ -67,8 +64,7 @@ const initialCards = [
   ];
 
 
-
-// Создаем объект конфига, в который собираем все для валидации форм
+// Объект конфига, в котором собрано все для валидации форм
 const validationConfig = {
     formSelector: '.popup__form', // Форма в попапе
     inputSelector: '.popup__form-input-item', // Любой инпут в любой форме
@@ -79,4 +75,32 @@ const validationConfig = {
   }
 
 
-  export { buttonEditProfileOpen, buttonAddCardOpen, buttonEditAvatar, popupElements, formEditProfile, formAddCard, formEditAvatar, initialCards, validationConfig, cardsContainer, popupEditProfile, popupAddCard, imagePopup, popupImage, popupEditAvatar, nameInput, jobInput, profileName, profileOccupation, userAvatar, popupCaption, popupInputTitle, popupInputLink, popupEditAvatarLink, buttonSubmitEditProfile, buttonSubmitEditAvatar, buttonSubmitAddCard };
+  export { 
+    buttonEditProfileOpen, 
+    buttonAddCardOpen, 
+    buttonEditAvatar, 
+    popupElements, 
+    formEditProfile, 
+    formAddCard, 
+    formEditAvatar, 
+    initialCards, 
+    validationConfig, 
+    cardsContainer, 
+    popupEditProfile, 
+    popupAddCard, 
+    imagePopup, 
+    popupImage, 
+    popupEditAvatar, 
+    nameInput, 
+    jobInput, 
+    profileName, 
+    profileOccupation, 
+    userAvatar, 
+    popupCaption, 
+    popupInputTitle, 
+    popupInputLink, 
+    popupEditAvatarLink, 
+    buttonSubmitEditProfile, 
+    buttonSubmitEditAvatar, 
+    buttonSubmitAddCard 
+  };

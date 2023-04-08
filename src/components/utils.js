@@ -1,3 +1,4 @@
+/*
 //import { closePopupByEsc } from './modal.js';
 
 // УТИЛИТАРНЫЕ ФУНКЦИИ, КОТОРЫЕ ИСПОЛЬЗУЮТСЯ В РАБОТЕ СРАЗУ НЕСКОЛЬКИХ ДРУГИХ ФУНКЦИЙ
@@ -19,3 +20,4 @@ const closePopup = (popup) => {
 
 
 export { openPopup, closePopup };
+*/

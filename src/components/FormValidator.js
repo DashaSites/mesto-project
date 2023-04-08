@@ -157,9 +157,11 @@ export default class FormValidator {
 
 
 
+
+
 /*
 
-// ВАЛИДАЦИЯ ВСЕХ ФОРМ
+// ВАЛИДАЦИЯ ВСЕХ ФОРМ, КОТОРАЯ РАБОТАЛА ДО ООП
 
 // Добавим невалидные стили и сообщение об ошибке (если инпут невалиден)
 const showInputError = (inputElement, errorElement, inputErrorClass, errorClass) => {
@@ -308,5 +310,4 @@ const showInputError = (inputElement, errorElement, inputErrorClass, errorClass)
       );
     });
   }
-
   */

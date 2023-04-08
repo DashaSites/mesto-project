@@ -6,10 +6,9 @@ export default class Card {
         this._likes = cardData.likes;
         this._ownerId = cardData.owner._id; // id владельца карточки
         this._id = cardData._id; // id карточки
-        this._currentUserId = currentUserId; // текущий пользователь
 
+        this._currentUserId = currentUserId; // текущий пользователь
         this._handlerImageClick = handlerImageClick; // открытие попапа по клику на картинку
-        
         this._cardSelector = cardSelector;
     }
 
@@ -59,17 +58,17 @@ export default class Card {
             this._likeButton.classList.remove('element__like-button_active');
         }
 
-        if (!this._isOwner()) { // Если карточка не моя, то прячем на ней кнопку удаления
+        if (!this._isOwner()) { // Если карточка не моя, то прячу на ней кнопку удаления
             this._deleteButton.classList.add('element__delete-button_hidden');
        }
 
-        // Здесь же вызываю обработчики:
+        // Вызываю обработчики:
         this._setEventListeners();
 
         return this._element;
     }
 
-    // Объединяю обработчики кликов по карточке в общей фукнкции
+    // Объединяю обработчики всех кликов по карточке в общей фукнкции
     _setEventListeners() {
         
         // 1) Удаление карточки
@@ -89,7 +88,7 @@ export default class Card {
         this._likeButton.addEventListener('click', (event) => {
             if (event.target.classList.contains('element__like-button_active')) { // Если карточка уже была лайкнута
                 api.unlikeCard(this._id)
-                .then((res) => { // Дезактивируем дайк
+                .then((res) => { // Деактивирую дайк
                     event.target.classList.remove('element__like-button_active');
                     this._likeCounterElement.textContent = res.likes.length;
                 })
@@ -97,7 +96,7 @@ export default class Card {
     
             } else { // Если карточка раньше не была лайкнута
                 api.likeCard(this._id) 
-                .then((res) => { // Активируем лайк
+                .then((res) => { // Активирую лайк
                     event.target.classList.add('element__like-button_active');
                     this._likeCounterElement.textContent = res.likes.length;
                 })
@@ -105,7 +104,7 @@ export default class Card {
             }
         })
 
-        // 3 - Слушатель клика по картинке c колбэком handlerImageClick
+        // 3) Слушатель клика по картинке c колбэком handlerImageClick
         this._cardImage.addEventListener('click', (event) => {
             this._handlerImageClick(this._link, this._name);
         })
@@ -129,7 +128,7 @@ export default class Card {
 
 
 /*
-ТАК РАБОТАЛО ДО ООП:
+ТАК CARD РАБОТАЛ ДО ООП:
 
 import { imagePopup, popupImage, popupCaption } from './constants.js'
 import { openPopup } from './utils.js'

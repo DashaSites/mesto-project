@@ -9,7 +9,7 @@ export default class PopupWithForm extends Popup {
         this._submitButton = this._form.querySelector('.popup__submit-button');
     }
 
-    _getInputValues() { // создаю объект и собираю в него данные всех полей формы
+    _getInputValues() { // Cоздаю объект и собираю в него данные из всех полей формы
         this._inputsCollection = {};
 
         this._inputs.forEach((input) => {
@@ -21,7 +21,7 @@ export default class PopupWithForm extends Popup {
 
     setEventListeners() { 
         super.setEventListeners();
-        // в дополнение к родительскому методу, добавляет обработчик сабмита формы
+        // в дополнение к родительскому методу, добавляю сюда обработчик сабмита формы
         this._form.addEventListener('submit', (event) => {
             event.preventDefault();
             this._submitButton.textContent = 'Сохранение...';
@@ -33,7 +33,7 @@ export default class PopupWithForm extends Popup {
     close() { 
         this._submitButton.textContent = 'Сохранить';
         super.close();
-        // в дополнение к родительскому методу форма сбрасывается  
+        // в дополнение к вызову родительского метода, форма сбрасывается  
         this._form.reset();
     }
 }

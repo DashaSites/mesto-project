@@ -3,7 +3,6 @@ export default class Popup {
         this._popupElement = document.querySelector(popupSelector);
     }
 
-
     open() {
         this._popupElement.classList.add('popup_opened');
 
