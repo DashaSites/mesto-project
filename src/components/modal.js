@@ -1,4 +1,4 @@
-import { popupEditProfile, popupAddCard, imagePopup, popupEditAvatar, profileName, profileOccupation, userAvatar, popupImage, popupCaption, popupEditAvatarLink, cardsContainer, buttonSubmitEditProfile, buttonSubmitEditAvatar, buttonSubmitAddCard } from './constants.js';
+import { popupEditProfile, popupAddCard, imagePopup, popupEditAvatar, profileName, profileOccupation, popupImage, popupCaption, popupEditAvatarLink, cardsContainer, buttonSubmitEditProfile, buttonSubmitEditAvatar, buttonSubmitAddCard } from './constants.js';
 import { openPopup, closePopup } from './utils.js';
 import { currentUserId, api, handlerImageClick } from '../index.js';
 import Card from './Card.js';
@@ -24,9 +24,9 @@ const handleButtonAddCardOpen = () => {
 
 
 // Обработчик кликов по кнопке открытия попапа для редактирования аватара
-const handleButtonEditAvatar = () => {
-    openPopup(popupEditAvatar);
-}
+//const handleButtonEditAvatar = () => {
+//    openPopup(popupEditAvatar);
+//}
 
 /*
 // Обработчик, который по клику по картинке открывает попап с картинкой
@@ -74,25 +74,8 @@ const submitFormEditProfile = (event) => {
 */
 
 
-// 2) ЗДЕСЬ ИСПОЛЬЗУЕМ РЕЗУЛЬТАТ ПРОМИСА
-// Обработчик отправки формы редактирования аватара
-const submitFormEditAvatar = (event) => {
-    event.preventDefault();
 
-    buttonSubmitEditAvatar.textContent = 'Сохранение...';
 
-    // Получим результат промиса (делаем замену методом PATCH)
-    api.updateAvatar(popupEditAvatarLink.value)
-    // В случае положительного ответа с сервера, содержимое этого ответа кладем в нужное место в DOM
-    .then((res) => {
-        userAvatar.style.backgroundImage = `url(${res.avatar})`;
-        closePopup(popupEditAvatar);
-    })
-    .catch((err) => console.log(err))
-    .finally(() => {
-        buttonSubmitEditAvatar.textContent = 'Сохранить';
-    });
-}
 
 
 /*
@@ -147,5 +130,3 @@ const closePopupByEsc = (event) => {
 }
 */
 
-
-export { submitFormEditAvatar, handleButtonEditAvatar };

@@ -1,5 +1,4 @@
-import { buttonEditProfileOpen, buttonAddCardOpen, buttonEditAvatar, popupElements, formEditProfile, formAddCard, formEditAvatar, profileName, profileOccupation, userAvatar, initialCards, validationConfig, nameInput, jobInput, imagePopup, cardsContainer, popupInputTitle, popupInputLink } from './components/constants.js'
-import { handleButtonEditAvatar, submitFormEditAvatar } from './components/modal.js';
+import { buttonEditProfileOpen, buttonAddCardOpen, buttonEditAvatar, formEditProfile, formAddCard, formEditAvatar, profileName, profileOccupation, userAvatar, validationConfig, nameInput, jobInput, imagePopup, cardsContainer, popupInputTitle, popupInputLink, popupEditAvatarLink } from './components/constants.js'
 //import { openPopup, closePopup } from './components/utils.js';
 import Api from './components/Api.js';
 import FormValidator from './components/FormValidator.js';
@@ -24,7 +23,7 @@ buttonEditProfileOpen.addEventListener('click', () => {
   handleButtonEditProfileOpen();
 });
 
-// Открываем попап редактирования профиля
+// Функция открытия попапа редактирования профиля
 const handleButtonEditProfileOpen = () => {
   const popupToEditProfile = new PopupWithForm('.popup_type_edit-profile', submitFormEditProfile); 
   popupToEditProfile.open();
@@ -57,6 +56,7 @@ buttonAddCardOpen.addEventListener('click', () => {
   handleButtonAddCardOpen();
 });
 
+// Функция открытия попапа добавления карточки
 const handleButtonAddCardOpen = () => {
   const popupToAddCard = new PopupWithForm('.popup_type_add-card', submitFormAddCard);
   popupToAddCard.open();
@@ -94,12 +94,35 @@ const submitFormAddCard = (event) => {
 }
 
 
-
-
-
-
 // Слушатель кликов по кнопке, открывающей попап редактирования аватара
-buttonEditAvatar.addEventListener('click', handleButtonEditAvatar);
+buttonEditAvatar.addEventListener('click', () => {
+  handleButtonEditAvatar();
+});
+
+// Функция, которая открывает попап для смены аватара
+const handleButtonEditAvatar = () => {
+  const popupToEditAvatar = new PopupWithForm('.popup_type_edit-avatar', submitFormEditAvatar);
+  popupToEditAvatar.open();
+  popupToEditAvatar.setEventListeners();
+}
+
+// 2) ЗДЕСЬ ИСПОЛЬЗУЕМ РЕЗУЛЬТАТ ПРОМИСА
+// Обработчик отправки формы редактирования аватара
+const submitFormEditAvatar = (event) => {
+
+  // Получим результат промиса (делаем замену методом PATCH)
+  api.updateAvatar(popupEditAvatarLink.value)
+  // В случае положительного ответа с сервера, содержимое этого ответа кладем в нужное место в DOM
+  .then((res) => {
+      userAvatar.style.backgroundImage = `url(${res.avatar})`;
+  })
+  .catch((err) => console.log(err));
+}
+
+
+
+
+
 
 
 // Обработчики одновременно оверлея и крестиков всех попапов:
@@ -123,7 +146,7 @@ popupElements.forEach((popup) => {
 
 
 // Слушатель кликов по кнопке "Создать" в попапе добавления новой карточки
-formAddCard.addEventListener('submit', submitFormAddCard);
+//formAddCard.addEventListener('submit', submitFormAddCard);
 
 
 // Слушатель кликов по кнопке "Сохранить" в попапе редактирования аватара
