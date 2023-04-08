@@ -19,6 +19,7 @@ module.exports = {
     compress: true,
     port: 8081
   },
+  devtool: 'eval-source-map',
   module: {
     rules: [{
         test: /\.js$/,
