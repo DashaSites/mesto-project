@@ -1,4 +1,4 @@
-import { api } from '../index.js';
+import { api } from '../pages/index.js';
 export default class Card {
     constructor(cardData, currentUserId, handlerImageClick, cardSelector) {
         this._link = cardData.link;
