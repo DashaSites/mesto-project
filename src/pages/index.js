@@ -108,7 +108,6 @@ const submitFormAddCard = (event) => {
   .catch((err) => console.log(err));
 }
 
-
 // Слушатель кликов по кнопке, открывающей попап редактирования аватара
 buttonEditAvatar.addEventListener('click', () => {
   handleButtonEditAvatar();
