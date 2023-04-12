@@ -11,15 +11,18 @@ import {
   jobInput, 
   popupInputTitle, 
   popupInputLink, 
-  popupEditAvatarLink 
-} from './components/constants.js';
-import Api from './components/Api.js';
-import FormValidator from './components/FormValidator.js';
-import Card from './components/Card.js';
-import Section from './components/Section.js';
-import PopupWithImage from './components/PopupWithImage.js';
-import PopupWithForm from './components/PopupWithForm.js';
-import UserInfo from './components/UserInfo.js';
+  popupEditAvatarLink,
+  buttonSubmitEditProfile, 
+  buttonSubmitEditAvatar, 
+  buttonSubmitAddCard 
+} from '../utils/constants.js';
+import Api from '../components/Api.js';
+import FormValidator from '../components/FormValidator.js';
+import Card from '../components/Card.js';
+import Section from '../components/Section.js';
+import PopupWithImage from '../components/PopupWithImage.js';
+import PopupWithForm from '../components/PopupWithForm.js';
+import UserInfo from '../components/UserInfo.js';
 
 const api = new Api({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-20',
@@ -37,6 +40,9 @@ const userInfo = new UserInfo({
 
 
 ///// РАБОТА С ПОПАПАМИ /////
+let popupToEditProfile;
+let popupToAddCard;
+let popupToEditAvatar;
 
 // Слушатель кликов по кнопке редактирования профиля
 buttonEditProfileOpen.addEventListener('click', () => {
@@ -45,7 +51,7 @@ buttonEditProfileOpen.addEventListener('click', () => {
 
 // Функция открытия попапа редактирования профиля
 const handleButtonEditProfileOpen = () => {
-  const popupToEditProfile = new PopupWithForm('.popup_type_edit-profile', submitFormEditProfile); 
+  popupToEditProfile = new PopupWithForm('.popup_type_edit-profile', submitFormEditProfile); 
   popupToEditProfile.open();
   popupToEditProfile.setEventListeners();
 
@@ -63,15 +69,21 @@ const submitFormEditProfile = (event) => {
   user.name = nameInput.value;
   user.about = jobInput.value;
 
+  buttonSubmitEditProfile.textContent = 'Сохранение...';
+
   api.updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
   // (мы вставляем эти данные в шапку из попапа)
   .then((user) => {
     userInfo.getUserInfo(user);
+    popupToEditProfile.close();
 
       //profileName.textContent = user.name;
       //profileOccupation.textContent = user.about;
   })
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(err))
+  .finally(() => {
+    buttonSubmitEditProfile.textContent = 'Сохранить';
+  });
 }
 
 
@@ -82,7 +94,7 @@ buttonAddCardOpen.addEventListener('click', () => {
 
 // Функция открытия попапа добавления карточки
 const handleButtonAddCardOpen = () => {
-  const popupToAddCard = new PopupWithForm('.popup_type_add-card', submitFormAddCard);
+  popupToAddCard = new PopupWithForm('.popup_type_add-card', submitFormAddCard);
   popupToAddCard.open();
   popupToAddCard.setEventListeners();
 }
@@ -92,6 +104,8 @@ const submitFormAddCard = (event) => {
   const newCard = {}; // Создаю объект для передачи на сервер двух его свойств
   newCard.name = popupInputTitle.value;
   newCard.link = popupInputLink.value;
+
+  buttonSubmitAddCard.textContent = 'Сохранение...';
 
   api.createCardOnServer(newCard) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
   .then((res) => {
@@ -104,10 +118,13 @@ const submitFormAddCard = (event) => {
         '.elements'
       )
       popupCardSection.renderItems([res]);
+      popupToAddCard.close();
   })
-  .catch((err) => console.log(err));
-}
-
+  .catch((err) => console.log(err))
+  .finally(() => {
+    buttonSubmitAddCard.textContent = 'Создать';
+});
+} 
 
 // Слушатель кликов по кнопке, открывающей попап редактирования аватара
 buttonEditAvatar.addEventListener('click', () => {
@@ -116,7 +133,7 @@ buttonEditAvatar.addEventListener('click', () => {
 
 // Функция, которая открывает попап для смены аватара
 const handleButtonEditAvatar = () => {
-  const popupToEditAvatar = new PopupWithForm('.popup_type_edit-avatar', submitFormEditAvatar);
+  popupToEditAvatar = new PopupWithForm('.popup_type_edit-avatar', submitFormEditAvatar);
   popupToEditAvatar.open();
   popupToEditAvatar.setEventListeners();
 }
@@ -124,13 +141,19 @@ const handleButtonEditAvatar = () => {
 // Обработчик отправки формы редактирования аватара: использую здесь результат промиса
 const submitFormEditAvatar = (event) => {
 
+  buttonSubmitEditAvatar.textContent = 'Сохранение...';
+
   // Получим результат промиса (делаем замену методом PATCH)
   api.updateAvatar(popupEditAvatarLink.value)
   // В случае положительного ответа с сервера содержимое этого ответа кладем в нужное место в DOM
   .then((res) => {
       userAvatar.style.backgroundImage = `url(${res.avatar})`;
+      popupToEditAvatar.close();
   })
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(err))
+  .finally(() => {
+    buttonSubmitEditAvatar.textContent = 'Сохранить';
+});
 }
 
 
@@ -196,3 +219,106 @@ formEditAvatarValidation.enableValidation();
 
 
 export { currentUserId, api, handlerImageClick };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///// ПРОШЛАЯ ВЕРСИЯ ОБРАБОТКИ ЗАПРОСОВ САБМИТА ФОРМ
+
+
+
+// ЗДЕСЬ ИСПОЛЬЗУЕМ РЕЗУЛЬТАТ ПРОМИСА
+// Обработчик отправки формы редактирования профиля
+
+/*
+const submitFormEditProfile = (event) => {
+  event.preventDefault();
+
+  const user = {};
+  user.name = nameInput.value;
+  user.about = jobInput.value;
+
+  
+  buttonSubmitEditProfile.textContent = 'Сохранение...';
+
+  api.updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
+  // (мы вставляем эти данные в шапку из попапа)
+  .then((user) => {
+      profileName.textContent = user.name;
+      profileOccupation.textContent = user.about;
+      closePopup(popupEditProfile);
+  })
+  .catch((err) => console.log(err))
+  .finally(() => {
+      buttonSubmitEditProfile.textContent = 'Сохранить';
+    }); 
+}
+
+
+// ЗДЕСЬ ИСПОЛЬЗУЕМ РЕЗУЛЬТАТ ПРОМИСА
+// Обработчик отправки формы редактирования аватара
+const submitFormEditAvatar = (event) => {
+  event.preventDefault();
+
+  buttonSubmitEditAvatar.textContent = 'Сохранение...';
+
+  // Получим результат промиса (делаем замену методом PATCH)
+  api.updateAvatar(popupEditAvatarLink.value)
+  // В случае положительного ответа с сервера, содержимое этого ответа кладем в нужное место в DOM
+  .then((res) => {
+      userAvatar.style.backgroundImage = `url(${res.avatar})`;
+      closePopup(popupEditAvatar);
+  })
+  .catch((err) => console.log(err))
+  .finally(() => {
+      buttonSubmitEditAvatar.textContent = 'Сохранить';
+  });
+  //userAvatar.style.backgroundImage = `url(${popupEditAvatarLink.value})`;
+}
+
+
+// ЗДЕСЬ ИСПОЛЬЗУЕМ РЕЗУЛЬТАТ ПРОМИСА
+// Обработчик сабмита формы с новой карточкой
+const submitFormAddCard = (event) => {
+  event.preventDefault();
+
+  const newCard = {}; // Создаю объект для передачи на сервер двух его свойств
+  newCard.name = popupInputTitle.value;
+  newCard.link = popupInputLink.value;
+
+  buttonSubmitAddCard.textContent = 'Сохранение...';
+  // Перед вызовом createCard сделать проверку: моя/не моя карточка
+
+  api.createCardOnServer(newCard) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
+  .then((res) => {
+      const popupCardSection = new Section(
+          (cardFromPopup) => {
+            const card = new Card(cardFromPopup, currentUserId, handlerImageClick);
+            const cardElement = card.generateCard();
+            return cardElement;
+          },
+        '.elements'
+      )
+      popupCardSection.renderItems([res]);
+
+      event.target.reset();
+      closePopup(popupAddCard);
+  })
+  .catch((err) => console.log(err))
+  .finally(() => {
+      buttonSubmitAddCard.textContent = 'Создать';
+  });
+}
+*/
