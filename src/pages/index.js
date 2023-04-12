@@ -69,7 +69,7 @@ const submitFormEditProfile = (event) => {
   user.name = nameInput.value;
   user.about = jobInput.value;
 
-  buttonSubmitEditProfile.textContent = 'Сохранение...';
+  popupToEditProfile.renderLoading(true);
 
   api.updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
   // (мы вставляем эти данные в шапку из попапа)
@@ -82,7 +82,7 @@ const submitFormEditProfile = (event) => {
   })
   .catch((err) => console.log(err))
   .finally(() => {
-    buttonSubmitEditProfile.textContent = 'Сохранить';
+    popupToEditProfile.renderLoading(false);
   });
 }
 
@@ -105,7 +105,7 @@ const submitFormAddCard = (event) => {
   newCard.name = popupInputTitle.value;
   newCard.link = popupInputLink.value;
 
-  buttonSubmitAddCard.textContent = 'Сохранение...';
+  popupToAddCard.renderLoading(true);
 
   api.createCardOnServer(newCard) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
   .then((res) => {
@@ -122,7 +122,7 @@ const submitFormAddCard = (event) => {
   })
   .catch((err) => console.log(err))
   .finally(() => {
-    buttonSubmitAddCard.textContent = 'Создать';
+    popupToAddCard.renderLoading(false);
 });
 } 
 
@@ -141,7 +141,7 @@ const handleButtonEditAvatar = () => {
 // Обработчик отправки формы редактирования аватара: использую здесь результат промиса
 const submitFormEditAvatar = (event) => {
 
-  buttonSubmitEditAvatar.textContent = 'Сохранение...';
+  popupToEditAvatar.renderLoading(true);
 
   // Получим результат промиса (делаем замену методом PATCH)
   api.updateAvatar(popupEditAvatarLink.value)
@@ -152,7 +152,7 @@ const submitFormEditAvatar = (event) => {
   })
   .catch((err) => console.log(err))
   .finally(() => {
-    buttonSubmitEditAvatar.textContent = 'Сохранить';
+    popupToEditAvatar.renderLoading(false);
 });
 }
 
