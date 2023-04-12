@@ -24,14 +24,13 @@ export default class PopupWithForm extends Popup {
         // в дополнение к родительскому методу, добавляю сюда обработчик сабмита формы
         this._form.addEventListener('submit', (event) => {
             event.preventDefault();
-            this._submitButton.textContent = 'Сохранение...';
+            //this._submitButton.textContent = 'Сохранение...';
             this._handleFormSubmit(this._inputsCollection);
-            this.close();
         });
     }
 
     close() { 
-        this._submitButton.textContent = 'Сохранить';
+        //this._submitButton.textContent = 'Сохранить';
         super.close();
         // в дополнение к вызову родительского метода, форма сбрасывается  
         this._form.reset();
