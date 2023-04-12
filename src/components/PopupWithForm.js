@@ -7,6 +7,7 @@ export default class PopupWithForm extends Popup {
         this._form = this._popupElement.querySelector('.popup__form');
         this._inputs = this._form.querySelectorAll('.popup__form-input-item');
         this._submitButton = this._form.querySelector('.popup__submit-button');
+        //this._submitButtonText = this._submitButton.textContent;
     }
 
     _getInputValues() { // Cоздаю объект и собираю в него данные из всех полей формы
@@ -18,6 +19,8 @@ export default class PopupWithForm extends Popup {
 
         return this._inputsCollection;
     }
+
+    //renderLoading(isLoading, loadingText='Сохранение...')
 
     setEventListeners() { 
         super.setEventListeners();
