@@ -8,6 +8,7 @@ export default class FormValidator {
     this._errorClass = config.errorClass;
 
     this._formElement = formElement;
+    this._submitButton = this._formElement.querySelector(this._submitButtonSelector); // кнопка сабмита в данной форме
     // Вынесла константу inputList из массива всех полей данной формы (раньше она определялась в функции setEventListeners) в конструктор:
     this._inputList = Array.from(this._formElement.querySelectorAll(this._inputSelector));
   }
@@ -72,30 +73,30 @@ export default class FormValidator {
 
 
   // Дизейблим кнопку сабмита:
-  _disableSubmitButton = (buttonElement) => {
+  _disableSubmitButton = () => {
     // Добавляем кнопке класс модификатора, который ее отключает
-    buttonElement.classList.add(this._disabledButtonClass);
-    buttonElement.disabled = true;
+    this._submitButton.classList.add(this._disabledButtonClass);
+    this._submitButton.disabled = true;
   };
 
 
   // Активируем кнопку сабмита:
-  _enableSubmitButton = (buttonElement) => {
+  _enableSubmitButton = () => {
     // Удаляем с кнопки класс модификатора, который ее дизейблил
-    buttonElement.classList.remove(this._disabledButtonClass);
-    buttonElement.disabled = false;
+    this._submitButton.classList.remove(this._disabledButtonClass);
+    this._submitButton.disabled = false;
   };
 
 
   // Переключатель состояния кнопки сабмита:
-  _toggleButtonState = (buttonElement) => {
+  _toggleButtonState = () => {
 
     // Если из всех полей данной формы какое-то сейчас невалидно - то дизейблим кнопку сабмита
     if (this._hasInvalidInput(this._inputList)) {
-      this._disableSubmitButton(buttonElement, this._disabledButtonClass);
+      this._disableSubmitButton(this._submitButton, this._disabledButtonClass);
     } else {
     // В противном случае - активируем кнопку сабмита
-      this._enableSubmitButton(buttonElement, this._disabledButtonClass);
+      this._enableSubmitButton(this._submitButton, this._disabledButtonClass);
     }
   };
 
@@ -103,16 +104,13 @@ export default class FormValidator {
   // Слушатель всех событий. В нем объявлены 2 функции, которые и исполняются:
   _setEventListeners = () => {
 
-    // Сразу как попали в форму, создаем переменную для кнопки сабмита в ней (в той форме, с которой сейчас работаем):
-    const buttonElement = this._formElement.querySelector(this._submitButtonSelector);
-
     // Деактивируем кнопку при 1й загрузке сайта
-    this._disableSubmitButton(buttonElement, this._disabledButtonClass);
+    this._disableSubmitButton(this._submitButton, this._disabledButtonClass);
 
     // Обработчик события reset, которым я в index.js сбрасываю поля формы (formAddCard) при ее сабмите
     // А тут я при событии reset заодно дизейблю кнопку
     this._formElement.addEventListener('reset', () => {
-      this._disableSubmitButton(buttonElement, this._disabledButtonClass);
+      this._disableSubmitButton(this._submitButton, this._disabledButtonClass);
     });
 
     // Слушатель сабмита формы
@@ -127,25 +125,18 @@ export default class FormValidator {
       // Для каждого инпута вызовем функцию checkInputValidity (она объявлена выше),
       // и вызовем функцию-переключатель состояния кнопки сабмита формы (объявлена выше)
         this._checkInputValidity(inputElement);
-        this._toggleButtonState(buttonElement);
+        this._toggleButtonState();
       });
     });
   
-    this._toggleButtonState(buttonElement);
+    this._toggleButtonState();
   }
 
 
   // Создаем функцию, которая будет валидировать все формы. В объекте config передадим в нее все селекторы, которые потом будем использовать при валидации
   // После того как объявим ее и другие функции валидации, вызовем ее в файле index.js
   enableValidation = () => {
-    this._setEventListeners(
-      this._formElement,
-      this._inputSelector,
-      this._submitButtonSelector,
-      this._inputErrorClass,
-      this._errorClass,
-      this._disabledButtonClass
-    );
+    this._setEventListeners();
   }
 }
 
