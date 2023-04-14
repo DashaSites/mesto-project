@@ -35,7 +35,8 @@ const api = new Api({
 
 const userInfo = new UserInfo({
   userNameSelector: '.profile__name', 
-  userJobSelector: '.profile__occupation'
+  userJobSelector: '.profile__occupation',
+  userAvatarSelector: '.profile__avatar'
 });
 
 
@@ -74,7 +75,7 @@ const submitFormEditProfile = (event) => {
   api.updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
   // (мы вставляем эти данные в шапку из попапа)
   .then((user) => {
-    userInfo.getUserInfo(user);
+    userInfo.setUserInfo(user);
     popupToEditProfile.close();
 
       //profileName.textContent = user.name;
@@ -147,7 +148,7 @@ const submitFormEditAvatar = (event) => {
   api.updateAvatar(popupEditAvatarLink.value)
   // В случае положительного ответа с сервера содержимое этого ответа кладем в нужное место в DOM
   .then((res) => {
-      userAvatar.style.backgroundImage = `url(${res.avatar})`;
+    userInfo.setUserInfo(res);
       popupToEditAvatar.close();
   })
   .catch((err) => console.log(err))
@@ -162,19 +163,19 @@ const submitFormEditAvatar = (event) => {
 let currentUserId; // Запишем в переменную id текущего пользователя, чтобы использовать его позже при создании карты 
 
 // Выкладываем начальный массив карт и забираем с сервера информацию о пользователе
-const renderInitialCards = (cards) => {
+const renderInitialData = (cards) => {
   // Вызываем функцию, которая делает запрос к серверу на получение 
   // начальной информации о пользователе и начального массива карточек
   api.getInitialData()
   .then(([user, cards]) => {
     // 1) Берем с сервера и выкладываем в шапку сайта начальную информацию о пользователе:
-    userInfo.getUserInfo(user);
+    userInfo.setUserInfo(user);
 
     //profileName.textContent = user.name; 
     //profileOccupation.textContent = user.about;
 
     currentUserId = user._id; // Определяем id текущего пользователя
-    userAvatar.style.backgroundImage = `url(${user.avatar})`; // И аватар текущего пользователя
+    //userAvatar.style.backgroundImage = `url(${user.avatar})`; // И аватар текущего пользователя
 
 
     // 2) Вызываем экземпляры класса Card для каждой карточки из массива  
@@ -195,14 +196,14 @@ const renderInitialCards = (cards) => {
 ////////// ФУНКЦИИ //////////
 
 // Вызываем функцию, которая выкладывает начальный массив карт
-renderInitialCards();
+renderInitialData();
 
 
 // Обработчик, который по клику по картинке открывает попап с картинкой
 const handlerImageClick = (link, name) => { 
   // Вместо вот этого кода ниже — вызвать экземпляр класса PopupWithImage
-  const popupWithImage = new PopupWithImage('.popup_type_large-image', link, name);
-  popupWithImage.open();
+  const popupWithImage = new PopupWithImage('.popup_type_large-image');
+  popupWithImage.open(link, name);
   popupWithImage.setEventListeners();
 }
 
