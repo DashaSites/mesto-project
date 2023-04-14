@@ -1,6 +1,6 @@
 import Popup from './Popup.js';
 export default class PopupWithForm extends Popup {
-    constructor(popupSelector, handleFormSubmit) {
+    constructor(popupSelector, { handleFormSubmit }) {
         super(popupSelector); // Вызываю конструктор попапа из класса родителя
         this._handleFormSubmit = handleFormSubmit;
 
@@ -33,15 +33,22 @@ export default class PopupWithForm extends Popup {
         // в дополнение к родительскому методу, добавляю сюда обработчик сабмита формы
         this._form.addEventListener('submit', (event) => {
             event.preventDefault();
-            //this._submitButton.textContent = 'Сохранение...';
-            this._handleFormSubmit(this._inputsCollection);
+            this._handleFormSubmit(this._getInputValues());
         });
     }
 
+
     close() { 
-        //this._submitButton.textContent = 'Сохранить';
         super.close();
         // в дополнение к вызову родительского метода, форма сбрасывается  
         this._form.reset();
+    }
+
+    
+    setInputValues(data) {
+      this._inputs.forEach((input) => {
+        // тут вставляем в `value` инпута данные из объекта по атрибуту `name` этого инпута
+        input.value = data[input.name];
+      });
     }
 }

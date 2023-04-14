@@ -12,9 +12,10 @@ import {
   popupInputTitle, 
   popupInputLink, 
   popupEditAvatarLink,
-  buttonSubmitEditProfile, 
-  buttonSubmitEditAvatar, 
-  buttonSubmitAddCard 
+  popupEditProfile,
+  popupAddCard,
+  popupEditAvatar,
+  imagePopup
 } from '../utils/constants.js';
 import Api from '../components/Api.js';
 import FormValidator from '../components/FormValidator.js';
@@ -41,121 +42,109 @@ const userInfo = new UserInfo({
 
 
 ///// РАБОТА С ПОПАПАМИ /////
-let popupToEditProfile;
-let popupToAddCard;
-let popupToEditAvatar;
 
-// Слушатель кликов по кнопке редактирования профиля
+// НАДО ПОПРАВИТЬ: Слушатель кликов по кнопке редактирования профиля
 buttonEditProfileOpen.addEventListener('click', () => {
-  handleButtonEditProfileOpen();
-});
-
-// Функция открытия попапа редактирования профиля
-const handleButtonEditProfileOpen = () => {
-  popupToEditProfile = new PopupWithForm('.popup_type_edit-profile', submitFormEditProfile); 
   popupToEditProfile.open();
-  popupToEditProfile.setEventListeners();
+  // Почему это не работает?
+  popupToEditProfile.setInputValues(userInfo.getUserInfo());  
+  
+  //const user = userInfo.getUserInfo();
+  //nameInput.value = user.name;
+  //jobInput.value = user.about;
 
   nameInput.value = userInfo.getUserName();
   jobInput.value = userInfo.getUserAbout();
+});
 
-  //nameInput.value = profileName.textContent;
-  //jobInput.value = profileOccupation.textContent; 
-}
 
-// Обработчик отправки формы редактирования профиля: использую здесь результат промиса
-const submitFormEditProfile = (event) => {
+// Попап редактирования профиля
+const popupToEditProfile = new PopupWithForm(popupEditProfile, {
+  handleFormSubmit: (user) => {
 
-  const user = {};
-  user.name = nameInput.value;
-  user.about = jobInput.value;
+    popupToEditProfile.renderLoading(true);
+    api.updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
+    // (мы вставляем эти данные в шапку из попапа)
+    .then((user) => {
+      userInfo.setUserInfo(user.name, user.about);
+      popupToEditProfile.close();
+  
+        //profileName.textContent = user.name;
+        //profileOccupation.textContent = user.about;
+    })
+    .catch((err) => console.log(err))
+    .finally(() => {
+      popupToEditProfile.renderLoading(false);
+    });
+  }
+}); 
+popupToEditProfile.setEventListeners();
 
-  popupToEditProfile.renderLoading(true);
-
-  api.updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
-  // (мы вставляем эти данные в шапку из попапа)
-  .then((user) => {
-    userInfo.setUserInfo(user);
-    popupToEditProfile.close();
-
-      //profileName.textContent = user.name;
-      //profileOccupation.textContent = user.about;
-  })
-  .catch((err) => console.log(err))
-  .finally(() => {
-    popupToEditProfile.renderLoading(false);
-  });
-}
 
 
 // Слушатель кликов по кнопке добавления новой карточки
 buttonAddCardOpen.addEventListener('click', () => {
-  handleButtonAddCardOpen();
+  popupToAddCard.open();
+  // Как-то здесь вызвать setInputValues?
 });
 
-// Функция открытия попапа добавления карточки
-const handleButtonAddCardOpen = () => {
-  popupToAddCard = new PopupWithForm('.popup_type_add-card', submitFormAddCard);
-  popupToAddCard.open();
-  popupToAddCard.setEventListeners();
-}
 
-// Обработчик сабмита формы с новой карточкой: использую здесь результат промиса 
-const submitFormAddCard = (event) => {
-  const newCard = {}; // Создаю объект для передачи на сервер двух его свойств
-  newCard.name = popupInputTitle.value;
-  newCard.link = popupInputLink.value;
+// Попап добавления новой карточки
+const popupToAddCard = new PopupWithForm(popupAddCard, {
+  handleFormSubmit: (data) => {
 
-  popupToAddCard.renderLoading(true);
+    //const newCard = {};
+    data.name = popupInputTitle.value;
+    data.link = popupInputLink.value;
 
-  api.createCardOnServer(newCard) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
-  .then((res) => {
+    popupToAddCard.renderLoading(true);
+
+    api.createCardOnServer(data) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
+    .then((data) => {
       const popupCardSection = new Section(
           (cardFromPopup) => {
-            const card = new Card(cardFromPopup, currentUserId, handlerImageClick);
-            const cardElement = card.generateCard();
-            return cardElement;
-          },
-        '.elements'
-      )
-      popupCardSection.renderItems([res]);
-      popupToAddCard.close();
-  })
-  .catch((err) => console.log(err))
-  .finally(() => {
-    popupToAddCard.renderLoading(false);
+              const card = new Card(cardFromPopup, currentUserId, handlerImageClick);
+              const cardElement = card.generateCard();
+              return cardElement;
+            },
+          '.elements'
+        )
+        popupCardSection.renderItems([data]);
+        popupToAddCard.close();
+    })
+    .catch((err) => console.log(err))
+    .finally(() => {
+      popupToAddCard.renderLoading(false);
+    });
+  }
 });
-} 
+popupToAddCard.setEventListeners();
+
 
 // Слушатель кликов по кнопке, открывающей попап редактирования аватара
 buttonEditAvatar.addEventListener('click', () => {
-  handleButtonEditAvatar();
-});
-
-// Функция, которая открывает попап для смены аватара
-const handleButtonEditAvatar = () => {
-  popupToEditAvatar = new PopupWithForm('.popup_type_edit-avatar', submitFormEditAvatar);
   popupToEditAvatar.open();
-  popupToEditAvatar.setEventListeners();
-}
-
-// Обработчик отправки формы редактирования аватара: использую здесь результат промиса
-const submitFormEditAvatar = (event) => {
-
-  popupToEditAvatar.renderLoading(true);
-
-  // Получим результат промиса (делаем замену методом PATCH)
-  api.updateAvatar(popupEditAvatarLink.value)
-  // В случае положительного ответа с сервера содержимое этого ответа кладем в нужное место в DOM
-  .then((res) => {
-    userInfo.setUserInfo(res);
-      popupToEditAvatar.close();
-  })
-  .catch((err) => console.log(err))
-  .finally(() => {
-    popupToEditAvatar.renderLoading(false);
 });
-}
+
+// Попап для смены аватара
+const popupToEditAvatar = new PopupWithForm(popupEditAvatar, {
+  handleFormSubmit: (data) => {
+    popupToEditAvatar.renderLoading(true);
+    // НЕ РАБОТАЕТ! КАКИМ ОБРАЗОМ ВЫТАЩИТЬ АВАТАР ИЗ userInfo.setUserInfo?
+    api.updateAvatar(data/*popupEditAvatarLink.value*/)
+    // В случае положительного ответа с сервера содержимое этого ответа кладем в нужное место в DOM
+    .then((data) => {
+      userInfo.setUserInfo(data.avatar);
+      popupToEditAvatar.close();
+    })
+    .catch((err) => console.log(err))
+    .finally(() => {
+      popupToEditAvatar.renderLoading(false);
+    });
+  }
+});
+popupToEditAvatar.setEventListeners();
+
 
 
 ///// ОБРАБОТКА ЗАПРОСОВ С СЕРВЕРА /////
@@ -200,12 +189,13 @@ renderInitialData();
 
 
 // Обработчик, который по клику по картинке открывает попап с картинкой
-const handlerImageClick = (link, name) => { 
-  // Вместо вот этого кода ниже — вызвать экземпляр класса PopupWithImage
-  const popupWithImage = new PopupWithImage('.popup_type_large-image');
+const handlerImageClick = (link, name) => {
   popupWithImage.open(link, name);
-  popupWithImage.setEventListeners();
-}
+} 
+
+const popupWithImage = new PopupWithImage(imagePopup);
+popupWithImage.setEventListeners();
+
 
 
 ///// ВАЛИДАЦИЯ /////
@@ -237,7 +227,6 @@ export { currentUserId, api, handlerImageClick };
 
 
 ///// ПРОШЛАЯ ВЕРСИЯ ОБРАБОТКИ ЗАПРОСОВ САБМИТА ФОРМ
-
 
 
 // ЗДЕСЬ ИСПОЛЬЗУЕМ РЕЗУЛЬТАТ ПРОМИСА

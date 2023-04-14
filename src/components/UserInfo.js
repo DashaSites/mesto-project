@@ -14,20 +14,20 @@ export default class UserInfo {
       this._avatar = avatar;
       this._id = _id;
 
-      this._userNameElement.textContent = this._name;
-      this._userJobElement.textContent = this._about;
+      this._userNameElement.textContent = name;
+      this._userJobElement.textContent = about;
       this._userAvatarElement.style.backgroundImage = `url(${this._avatar})`
     }
 
 
     // Возвращает данные пользователя 
-
-    getUserInfo() {
+    getUserInfo() { 
       return {
         name: this._userNameElement.textContent,
         about: this._userJobElement.textContent
       }
     }
+
 
     // Записываю передаваемые данные пользователя в соответствующие селекторы
     /*
