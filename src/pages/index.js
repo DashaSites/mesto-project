@@ -46,7 +46,7 @@ let cardSection;
 
 ///// РАБОТА С ПОПАПАМИ /////
 
-// НАДО ПОПРАВИТЬ: Слушатель кликов по кнопке редактирования профиля
+// Слушатель кликов по кнопке редактирования профиля
 buttonEditProfileOpen.addEventListener('click', () => {
   popupToEditProfile.open();
   popupToEditProfile.setInputValues(userInfo.getUserInfo());  
@@ -114,11 +114,10 @@ buttonEditAvatar.addEventListener('click', () => {
 const popupToEditAvatar = new PopupWithForm(popupEditAvatar, {
   handleFormSubmit: (data) => {
     popupToEditAvatar.renderLoading(true);
-    // НЕ РАБОТАЕТ! КАКИМ ОБРАЗОМ ВЫТАЩИТЬ АВАТАР ИЗ userInfo.setUserInfo?
-    api.updateAvatar(data/*popupEditAvatarLink.value*/)
+    api.updateAvatar(data.link)
     // В случае положительного ответа с сервера содержимое этого ответа кладем в нужное место в DOM
     .then((data) => {
-      userInfo.setUserInfo(data.avatar);
+      userInfo.setUserInfo(data);
       popupToEditAvatar.close();
     })
     .catch((err) => console.log(err))
