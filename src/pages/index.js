@@ -58,7 +58,7 @@ const popupToEditProfile = new PopupWithForm(popupEditProfile, {
     api.updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
     // (мы вставляем эти данные в шапку из попапа)
     .then((user) => {
-      userInfo.setUserInfo(user.name, user.about);
+      userInfo.setUserInfo(user);
       popupToEditProfile.close();
   
         //profileName.textContent = user.name;
