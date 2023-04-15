@@ -41,6 +41,9 @@ const userInfo = new UserInfo({
 });
 
 
+let cardSection;
+
+
 ///// РАБОТА С ПОПАПАМИ /////
 
 // НАДО ПОПРАВИТЬ: Слушатель кликов по кнопке редактирования профиля
@@ -60,9 +63,6 @@ const popupToEditProfile = new PopupWithForm(popupEditProfile, {
     .then((user) => {
       userInfo.setUserInfo(user);
       popupToEditProfile.close();
-  
-        //profileName.textContent = user.name;
-        //profileOccupation.textContent = user.about;
     })
     .catch((err) => console.log(err))
     .finally(() => {
@@ -93,15 +93,7 @@ const popupToAddCard = new PopupWithForm(popupAddCard, {
 
     api.createCardOnServer(data) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
     .then((data) => {
-      const popupCardSection = new Section(
-          (cardFromPopup) => {
-              const card = new Card(cardFromPopup, currentUserId, handlerImageClick);
-              const cardElement = card.generateCard();
-              return cardElement;
-            },
-          '.elements'
-        )
-        popupCardSection.renderItems([data]);
+        cardSection.renderItems([data]);
         popupToAddCard.close();
     })
     .catch((err) => console.log(err))
@@ -160,9 +152,9 @@ const renderInitialData = (cards) => {
 
 
     // 2) Вызываем экземпляры класса Card для каждой карточки из массива  
-    const cardSection = new Section(
-      (cardFromArray) => {
-        const card = new Card(cardFromArray, currentUserId, handlerImageClick);
+    cardSection = new Section(
+      (cardData) => {
+        const card = new Card(cardData, currentUserId, handlerImageClick);
         const cardElement = card.generateCard();
         return cardElement;
       },
