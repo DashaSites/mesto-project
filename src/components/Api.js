@@ -39,13 +39,14 @@ export default class Api {
 
 // Сохраняем на сервере отредактированные данные профиля
     updateUserInfo = (user) => {
+        const body = {
+            name: user.name,
+            about: user.occupation
+        }
         return this.request(`${this._baseUrl}/users/me`, {
             method: 'PATCH',
             headers: this._headers,
-            body: JSON.stringify({
-                name: user.name,
-                about: user.about
-          })
+            body: JSON.stringify(body)
         })
     }
 
