@@ -18,14 +18,14 @@ export default class Api {
     }
 
 
-  // Получаем с сервера начальные данные о пользователе
+    // Получаем с сервера начальные данные о пользователе
     getCurrentUser = () => {
         return this.request(`${this._baseUrl}/users/me`, {
         headers: this._headers
       })
     }
 
-// Загружаем начальные карточки с сервера
+    // Загружаем начальные карточки с сервера
     getInitialCards = () => {
         return this.request(`${this._baseUrl}/cards`, {
         headers: this._headers
@@ -37,7 +37,7 @@ export default class Api {
     }
 
 
-// Сохраняем на сервере отредактированные данные профиля
+    // Сохраняем на сервере отредактированные данные профиля
     updateUserInfo = (user) => {
         const body = {
             name: user.name,
@@ -73,7 +73,7 @@ export default class Api {
     }
 
 
-// Обновление аватара пользователя
+    // Обновление аватара пользователя
     updateAvatar = (link) => {
         return this.request(`${this._baseUrl}/users/me/avatar`, {
             method: 'PATCH',

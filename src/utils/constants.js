@@ -3,22 +3,17 @@
 const buttonEditProfileOpen = document.querySelector('.profile__edit-button'); // Кнопка, открывающая попап редактирования профиля
 const buttonAddCardOpen = document.querySelector('.profile__add-button'); // Кнопка, открывающая попап добавления новой карточки 
 const buttonEditAvatar = document.querySelector('.profile__avatar'); // Кнопка, открывающая попап редактирования аватара
-const nameInput = document.querySelector('.popup__form-input-item_type_name'); // Имя в поле попапа профиля
-const jobInput = document.querySelector('.popup__form-input-item_type_occupation'); // Род занятий в поле попапа профиля
 const profileName = document.querySelector('.profile__name'); // Имя пользователя в шапке
 const profileOccupation = document.querySelector('.profile__occupation'); // Род занятий в шапке
-const userAvatar = document.querySelector('.profile__avatar'); // Аватар пользователя в шапке
 const formEditProfile = document.forms['edit-profile-form']; // Форма в попапе редактирования профиля
 const formAddCard = document.forms['add-card-form']; // Форма в попапе добавления новой карточки
 const formEditAvatar = document.forms['edit-avatar-form']; // Форма в попапе редактирования аватара
 const cardsContainer = document.querySelector('.elements'); // Контейнер для всех карточек
 const popupInputTitle = formAddCard.querySelector('.popup__form-input-item_type_title'); // Инпут подписи в попапе-2
 const popupInputLink = formAddCard.querySelector('.popup__form-input-item_type_link'); // Инпут ссылки в попапе-2
-const popupEditAvatarLink = formEditAvatar.querySelector('.popup__form-input-item_type_link'); // Инпут ссылки в попапе редактирования аватара
 const popupImage = document.querySelector('.popup__image'); // Картинка в попапе-3
 const popupCaption = document.querySelector('.popup__caption'); // Подпись в попапе-3
 const popupElements = document.querySelectorAll('.popup'); // Все попапы
-
 const popupEditProfile = '.popup_type_edit-profile'; // селектор попапа редактирования профиля
 const popupAddCard = '.popup_type_add-card'; // селектор попапа добавления новой карточки
 const popupEditAvatar = '.popup_type_edit-avatar'; // селектор попапа редактирования аватара
@@ -90,13 +85,9 @@ const validationConfig = {
     imagePopup, 
     popupImage, 
     popupEditAvatar, 
-    nameInput, 
-    jobInput, 
     profileName, 
     profileOccupation, 
-    userAvatar, 
     popupCaption, 
     popupInputTitle, 
-    popupInputLink, 
-    popupEditAvatarLink    
+    popupInputLink
   };

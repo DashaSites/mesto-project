@@ -4,8 +4,6 @@ export default class PopupWithImage extends Popup {
         super(popupSelector); // Вызываю конструктор попапа-родителя
         this._popupImage = this._popupElement.querySelector('.popup__image');
         this._popupCaption = this._popupElement.querySelector('.popup__caption');
-
-
     }
 
     open(link, name) {

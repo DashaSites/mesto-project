@@ -5,13 +5,9 @@ import {
   formEditProfile, 
   formAddCard, 
   formEditAvatar, 
-  userAvatar, 
-  validationConfig, 
-  nameInput, 
-  jobInput, 
+  validationConfig,  
   popupInputTitle, 
   popupInputLink, 
-  popupEditAvatarLink,
   popupEditProfile,
   popupAddCard,
   popupEditAvatar,
@@ -24,6 +20,7 @@ import Section from '../components/Section.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
+
 
 const api = new Api({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-20',
@@ -52,11 +49,9 @@ buttonEditProfileOpen.addEventListener('click', () => {
   popupToEditProfile.setInputValues(userInfo.getUserInfo());  
 });
 
-
 // Попап редактирования профиля
 const popupToEditProfile = new PopupWithForm(popupEditProfile, {
   handleFormSubmit: (user) => {
-
     popupToEditProfile.renderLoading(true);
     api.updateUserInfo(user) // Рендерим ответ, который мы получили от сервера, заменив на нем методом PATCH данные пользователя 
     // (мы вставляем эти данные в шапку из попапа)
@@ -73,19 +68,14 @@ const popupToEditProfile = new PopupWithForm(popupEditProfile, {
 popupToEditProfile.setEventListeners();
 
 
-
 // Слушатель кликов по кнопке добавления новой карточки
 buttonAddCardOpen.addEventListener('click', () => {
-  popupToAddCard.open();
-  // Как-то здесь вызвать setInputValues?
+  popupToAddCard.open(); 
 });
-
 
 // Попап добавления новой карточки
 const popupToAddCard = new PopupWithForm(popupAddCard, {
   handleFormSubmit: (data) => {
-
-    //const newCard = {};
     data.name = popupInputTitle.value;
     data.link = popupInputLink.value;
 
@@ -129,10 +119,15 @@ const popupToEditAvatar = new PopupWithForm(popupEditAvatar, {
 popupToEditAvatar.setEventListeners();
 
 
+// Запишем в переменную id текущего пользователя, чтобы использовать его позже при создании карты 
+let currentUserId; 
 
-///// ОБРАБОТКА ЗАПРОСОВ С СЕРВЕРА /////
 
-let currentUserId; // Запишем в переменную id текущего пользователя, чтобы использовать его позже при создании карты 
+const createCard = (cardData) => {
+  const card = new Card(cardData, currentUserId, handlerImageClick);
+  const cardElement = card.generateCard();
+  return cardElement;
+}
 
 // Выкладываем начальный массив карт и забираем с сервера информацию о пользователе
 const renderInitialData = (cards) => {
@@ -143,18 +138,12 @@ const renderInitialData = (cards) => {
     // 1) Берем с сервера и выкладываем в шапку сайта начальную информацию о пользователе:
     userInfo.setUserInfo(user);
 
-    //profileName.textContent = user.name; 
-    //profileOccupation.textContent = user.about;
-
     currentUserId = user._id; // Определяем id текущего пользователя
-    //userAvatar.style.backgroundImage = `url(${user.avatar})`; // И аватар текущего пользователя
-
 
     // 2) Вызываем экземпляры класса Card для каждой карточки из массива  
     cardSection = new Section(
       (cardData) => {
-        const card = new Card(cardData, currentUserId, handlerImageClick);
-        const cardElement = card.generateCard();
+        const cardElement = createCard(cardData)
         return cardElement;
       },
     '.elements'
@@ -165,8 +154,6 @@ const renderInitialData = (cards) => {
 }
  
 
-////////// ФУНКЦИИ //////////
-
 // Вызываем функцию, которая выкладывает начальный массив карт
 renderInitialData();
 
@@ -176,9 +163,9 @@ const handlerImageClick = (link, name) => {
   popupWithImage.open(link, name);
 } 
 
+
 const popupWithImage = new PopupWithImage(imagePopup);
 popupWithImage.setEventListeners();
-
 
 
 ///// ВАЛИДАЦИЯ /////
@@ -193,10 +180,6 @@ formEditAvatarValidation.enableValidation();
 
 
 export { currentUserId, api, handlerImageClick };
-
-
-
-
 
 
 
