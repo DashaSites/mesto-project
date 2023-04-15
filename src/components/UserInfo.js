@@ -24,30 +24,7 @@ export default class UserInfo {
     getUserInfo() { 
       return {
         name: this._userNameElement.textContent,
-        about: this._userJobElement.textContent
+        occupation: this._userJobElement.textContent
       }
-    }
-
-
-    // Записываю передаваемые данные пользователя в соответствующие селекторы
-    /*
-    getUserInfo( { name, about } ) { 
-      this._userNameElement.textContent = name;
-      this._userJobElement.textContent = about;
-
-      //this._userAvatarElement.style.backgroundImage = avatar;
-
-      // Сохраняю эти значения в свойства объекта this, чтобы к ним можно было отдельно обратиться
-      this._name = this._userNameElement.textContent;
-      this._about = this._userJobElement.textContent;
-    }
-    */
-
-    getUserName() {
-      return this._userNameElement.textContent;
-    }
-
-    getUserAbout() {
-      return this._userJobElement.textContent
     }
 }

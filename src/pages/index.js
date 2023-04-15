@@ -46,15 +46,7 @@ const userInfo = new UserInfo({
 // НАДО ПОПРАВИТЬ: Слушатель кликов по кнопке редактирования профиля
 buttonEditProfileOpen.addEventListener('click', () => {
   popupToEditProfile.open();
-  // Почему это не работает?
   popupToEditProfile.setInputValues(userInfo.getUserInfo());  
-  
-  //const user = userInfo.getUserInfo();
-  //nameInput.value = user.name;
-  //jobInput.value = user.about;
-
-  nameInput.value = userInfo.getUserName();
-  jobInput.value = userInfo.getUserAbout();
 });
 
 
