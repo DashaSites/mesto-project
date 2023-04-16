@@ -9,8 +9,6 @@ const formEditProfile = document.forms['edit-profile-form']; // Форма в п
 const formAddCard = document.forms['add-card-form']; // Форма в попапе добавления новой карточки
 const formEditAvatar = document.forms['edit-avatar-form']; // Форма в попапе редактирования аватара
 const cardsContainer = document.querySelector('.elements'); // Контейнер для всех карточек
-const popupInputTitle = formAddCard.querySelector('.popup__form-input-item_type_title'); // Инпут подписи в попапе-2
-const popupInputLink = formAddCard.querySelector('.popup__form-input-item_type_link'); // Инпут ссылки в попапе-2
 const popupImage = document.querySelector('.popup__image'); // Картинка в попапе-3
 const popupCaption = document.querySelector('.popup__caption'); // Подпись в попапе-3
 const popupElements = document.querySelectorAll('.popup'); // Все попапы
@@ -87,7 +85,5 @@ const validationConfig = {
     popupEditAvatar, 
     profileName, 
     profileOccupation, 
-    popupCaption, 
-    popupInputTitle, 
-    popupInputLink
+    popupCaption
   };

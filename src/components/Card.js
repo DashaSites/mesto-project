@@ -68,6 +68,7 @@ export default class Card {
         return this._element;
     }
 
+
     // Объединяю обработчики всех кликов по карточке в общей фукнкции
     _setEventListeners() {
         

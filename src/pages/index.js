@@ -6,8 +6,6 @@ import {
   formAddCard, 
   formEditAvatar, 
   validationConfig,  
-  popupInputTitle, 
-  popupInputLink, 
   popupEditProfile,
   popupAddCard,
   popupEditAvatar,
@@ -76,9 +74,6 @@ buttonAddCardOpen.addEventListener('click', () => {
 // Попап добавления новой карточки
 const popupToAddCard = new PopupWithForm(popupAddCard, {
   handleFormSubmit: (data) => {
-    data.name = popupInputTitle.value;
-    data.link = popupInputLink.value;
-
     popupToAddCard.renderLoading(true);
 
     api.createCardOnServer(data) // Получаю с сервера новую карточку, которая вдобавок к двум имеющимся свойствам получает и другие из стандартного набора свойств
