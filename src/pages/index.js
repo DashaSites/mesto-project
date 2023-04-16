@@ -124,7 +124,7 @@ let currentUserId;
 
 
 const createCard = (cardData) => {
-  const card = new Card(cardData, currentUserId, handlerImageClick);
+  const card = new Card(cardData, currentUserId, handlerImageClick, api, '.element-template');
   const cardElement = card.generateCard();
   return cardElement;
 }
@@ -179,7 +179,7 @@ const formEditAvatarValidation = new FormValidator(validationConfig, formEditAva
 formEditAvatarValidation.enableValidation();
 
 
-export { currentUserId, api, handlerImageClick };
+export { currentUserId, handlerImageClick };
 
 
 

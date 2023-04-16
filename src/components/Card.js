@@ -1,6 +1,5 @@
-import { api } from '../pages/index.js';
 export default class Card {
-    constructor(cardData, currentUserId, handlerImageClick, cardSelector) {
+    constructor(cardData, currentUserId, handlerImageClick, api, templateSelector) {
         this._link = cardData.link;
         this._name = cardData.name;
         this._likes = cardData.likes;
@@ -9,7 +8,8 @@ export default class Card {
 
         this._currentUserId = currentUserId; // текущий пользователь
         this._handlerImageClick = handlerImageClick; // открытие попапа по клику на картинку
-        this._cardSelector = cardSelector;
+        this._api = api;
+        this._templateSelector = templateSelector;
     }
 
 
@@ -27,7 +27,7 @@ export default class Card {
     // Создаю DOM-элемент-заготовку для карточки, чтобы его потом наполнить данными, а потом отрендерить в верстке
     _getTemplate() {
         const cardElement = document
-        .querySelector('.element-template')
+        .querySelector(this._templateSelector)
         .content
         .querySelector('.element')
         .cloneNode(true);
@@ -76,7 +76,7 @@ export default class Card {
             this._deleteButton.classList.add('element__delete-button_hidden');
         } else { // А если моя, то на кнопку удаления карточки навешивается слушатель кликов с колбэком для удаления карточки
             this._deleteButton.addEventListener('click', (event) => {
-                api.deleteCardOnServer(this._id)
+                this._api.deleteCardOnServer(this._id)
                 .then(() => {
                     event.target.closest('.element').remove();
                 })
@@ -87,7 +87,7 @@ export default class Card {
         // 2) Слушатель кликов по лайку:
         this._likeButton.addEventListener('click', (event) => {
             if (event.target.classList.contains('element__like-button_active')) { // Если карточка уже была лайкнута
-                api.unlikeCard(this._id)
+                this._api.unlikeCard(this._id)
                 .then((res) => { // Деактивирую дайк
                     event.target.classList.remove('element__like-button_active');
                     this._likeCounterElement.textContent = res.likes.length;
@@ -95,7 +95,7 @@ export default class Card {
                 .catch((err) => console.log(err));
     
             } else { // Если карточка раньше не была лайкнута
-                api.likeCard(this._id) 
+                this._api.likeCard(this._id) 
                 .then((res) => { // Активирую лайк
                     event.target.classList.add('element__like-button_active');
                     this._likeCounterElement.textContent = res.likes.length;
