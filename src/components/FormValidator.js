@@ -1,4 +1,158 @@
-// ВАЛИДАЦИЯ ВСЕХ ФОРМ
+export default class FormValidator {
+  constructor(config, formElement) {
+    this._formSelector = config.formSelector;
+    this._inputSelector = config.inputSelector;
+    this._submitButtonSelector = config.submitButtonSelector;
+    this._disabledButtonClass = config.disabledButtonClass;
+    this._inputErrorClass = config.inputErrorClass;
+    this._errorClass = config.errorClass;
+
+    this._formElement = formElement;
+    this._submitButton = this._formElement.querySelector(this._submitButtonSelector); // кнопка сабмита в данной форме
+    // Вынесла константу inputList из массива всех полей данной формы (раньше она определялась в функции setEventListeners) в конструктор:
+    this._inputList = Array.from(this._formElement.querySelectorAll(this._inputSelector));
+  }
+
+
+  // Добавим невалидные стили и сообщение об ошибке (если инпут невалиден)
+  _showInputError = (inputElement, errorElement) => {
+    // Добавляем стили ошибки для инпута
+    inputElement.classList.add(this._inputErrorClass);
+    // В спан ошибки кладем сообщение об ошибке
+    errorElement.textContent = inputElement.validationMessage;
+    // Делаем спан ошибки видимым
+    errorElement.classList.add(this._errorClass);
+  };
+
+
+  // Скроем сообщение об ошибке и невалидные стили
+  _hideInputError = (inputElement, errorElement) => {
+    // Убираем стили невалидного инпута
+    inputElement.classList.remove(this._inputErrorClass);
+    // Делаем спан с ошибкой невидимым
+    errorElement.classList.remove(this._errorClass);
+    // Вытираем сообщение об ошибке (если оно было)
+    errorElement.textContent = '';
+  };
+
+
+  // Проверяем инпут на валидность. Эту функцию мы вызываем для каждого инпута в функции setEventListeners ниже
+  _checkInputValidity = (inputElement) => {
+  
+    // Объявляем переменную, кладем в нее сообщение об ошибке и используем ее дальше:
+    const errorElement = this._formElement.querySelector(`#${inputElement.id}-error`);
+
+    if (inputElement.validity.patternMismatch) {
+      // встроенный метод setCustomValidity принимает на вход value data-атрибута из инпута
+      // это value мы вытаскиваем из html-атрибута, используя здесь ключевое слово dataset
+      inputElement.setCustomValidity(inputElement.dataset.errorMessage);
+    } else {
+      // если передать пустую строку, то будут доступны
+      // стандартные браузерные сообщения
+      inputElement.setCustomValidity("");
+    }
+
+
+    // Прогонии инпут через условную конструкцию. Если он невалиден, то в специальной функции добавим ему стиль невалидного + покажем сообщение об ошибке
+    if (!inputElement.validity.valid) {
+      this._showInputError(inputElement, errorElement, this._inputErrorClass, this._errorClass);
+      // Если жи инпут валиден, то вызовем другую функцию, где не будет невалидного стиля и сообщения об ошибке
+    } else {
+      this._hideInputError(inputElement, errorElement, this._inputErrorClass, this._errorClass);
+    }
+  };
+
+
+  // Проверяем, есть ли в форме хотя бы один невалидный инпут
+  _hasInvalidInput = () => {
+    return this._inputList.some(inputElement => {
+    // Пройдемся методом some по массиву инпутов и проверим, вернется ли хотя бы для одного инпута данной формы значение "невалидно":
+    return !inputElement.validity.valid;
+    });
+  };
+
+
+  // Дизейблим кнопку сабмита:
+  _disableSubmitButton = () => {
+    // Добавляем кнопке класс модификатора, который ее отключает
+    this._submitButton.classList.add(this._disabledButtonClass);
+    this._submitButton.disabled = true;
+  };
+
+
+  // Активируем кнопку сабмита:
+  _enableSubmitButton = () => {
+    // Удаляем с кнопки класс модификатора, который ее дизейблил
+    this._submitButton.classList.remove(this._disabledButtonClass);
+    this._submitButton.disabled = false;
+  };
+
+
+  // Переключатель состояния кнопки сабмита:
+  _toggleButtonState = () => {
+
+    // Если из всех полей данной формы какое-то сейчас невалидно - то дизейблим кнопку сабмита
+    if (this._hasInvalidInput(this._inputList)) {
+      this._disableSubmitButton(this._submitButton, this._disabledButtonClass);
+    } else {
+    // В противном случае - активируем кнопку сабмита
+      this._enableSubmitButton(this._submitButton, this._disabledButtonClass);
+    }
+  };
+
+
+  // Слушатель всех событий. В нем объявлены 2 функции, которые и исполняются:
+  _setEventListeners = () => {
+
+    // Деактивируем кнопку при 1й загрузке сайта
+    this._disableSubmitButton(this._submitButton, this._disabledButtonClass);
+
+    // Обработчик события reset, которым я в index.js сбрасываю поля формы (formAddCard) при ее сабмите
+    // А тут я при событии reset заодно дизейблю кнопку
+    this._formElement.addEventListener('reset', () => {
+      this._disableSubmitButton(this._submitButton, this._disabledButtonClass);
+    });
+
+    // Слушатель сабмита формы
+    this._formElement.addEventListener('submit', (event) => {
+    // Отменяем действие сабмита по умолчанию
+      event.preventDefault();
+    });
+    
+    // Переберем массив инпутов методом forEach, и по каждому инпуту пройдемся слушателем события инпута:
+    this._inputList.forEach(inputElement => {
+      inputElement.addEventListener('input', () => {
+      // Для каждого инпута вызовем функцию checkInputValidity (она объявлена выше),
+      // и вызовем функцию-переключатель состояния кнопки сабмита формы (объявлена выше)
+        this._checkInputValidity(inputElement);
+        this._toggleButtonState();
+      });
+    });
+  
+    this._toggleButtonState();
+  }
+
+
+  // Создаем функцию, которая будет валидировать все формы. В объекте config передадим в нее все селекторы, которые потом будем использовать при валидации
+  // После того как объявим ее и другие функции валидации, вызовем ее в файле index.js
+  enableValidation = () => {
+    this._setEventListeners();
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+// ВАЛИДАЦИЯ ВСЕХ ФОРМ, КОТОРАЯ РАБОТАЛА ДО ООП
 
 // Добавим невалидные стили и сообщение об ошибке (если инпут невалиден)
 const showInputError = (inputElement, errorElement, inputErrorClass, errorClass) => {
@@ -147,3 +301,4 @@ const showInputError = (inputElement, errorElement, inputErrorClass, errorClass)
       );
     });
   }
+  */
