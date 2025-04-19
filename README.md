@@ -8,4 +8,5 @@ JavaScript
 HTML  
 CSS  
 Webpack
+Figma
 
