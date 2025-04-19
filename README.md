@@ -4,9 +4,9 @@ A responsive web application that lets users add, like, and delete photo cards, 
 🔗  [Live demo](https://lighthearted-kitsune-796c68.netlify.app/)
 
 #### Technologies:
-JavaScript  
-HTML  
-CSS  
-Webpack
-Figma
+- JavaScript  
+- HTML  
+- CSS  
+- Webpack  
+- Figma
 
